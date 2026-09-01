@@ -24,9 +24,10 @@ Seluruhnya HTML, CSS, dan JavaScript murni. Tanpa framework, tanpa langkah build
 
 ## Beberapa keputusan
 
-**Mobile-first dengan lebar 480px.** Di desktop, aplikasinya terpusat di tengah dengan
-latar bermotif grid — jadi tetap enak dilihat tanpa perlu membuat tata letak desktop
-terpisah.
+**Mobile-first, dengan tata letak desktop tersendiri.** Di bawah 520px aplikasinya
+memakai lebar 480px seperti tampilan ponsel. Mulai 1024px ke atas ada breakpoint
+terpisah yang melebarkannya sampai 1280px, jadi di layar besar tampilannya tidak
+sekadar kolom sempit yang dipusatkan.
 
 **Token desain lewat CSS custom properties.** Warna, bayangan, dan tipografi
 didefinisikan sekali di `:root`, lalu dipakai ulang di semua halaman:
