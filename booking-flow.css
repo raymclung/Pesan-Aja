@@ -3,18 +3,6 @@
    Multi-vertical schema-driven booking UI.
 ============================================================ */
 
-:root {
-  --pa-primary: #1F4FD9;
-  --pa-primary-600: #1A45BF;
-  --pa-accent: #FF7A2D;
-  --pa-ink: #0B1726;
-  --pa-muted: #5B6B7E;
-  --pa-line: #E6EAF0;
-  --pa-bg-alt: #F6F8FC;
-  --pa-success: #16A34A;
-  --pa-danger:  #EF4444;
-}
-
 * { box-sizing: border-box; }
 body.bf-body {
   margin: 0;

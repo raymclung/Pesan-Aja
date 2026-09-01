@@ -1,0 +1,59 @@
+/* =========================================================
+   PesanAja — Token desain
+   Satu-satunya tempat warna, bayangan, dan tipografi
+   didefinisikan. Dimuat paling awal di setiap halaman.
+   ========================================================= */
+:root{
+  /* Warna utama */
+  --c-primary: #1F4FD9;
+  --c-primary-600: #1A45BF;
+  --c-primary-700: #153BA6;
+
+  /* Aksen */
+  --c-accent: #FF7A2D;
+  --c-accent-600: #ED6A1C;
+  --c-teal: #15B79E;
+
+  /* Teks */
+  --c-ink: #0B1726;
+  --c-ink-2: #1B2738;
+  --c-muted: #5B6B7E;
+  --c-muted-2: #8492A6;
+
+  /* Garis & latar */
+  --c-line: #E6EAF0;
+  --c-line-2: #EEF2F7;
+  --c-bg: #FFFFFF;
+  --c-bg-alt: #F6F8FC;
+  --c-bg-soft: #EEF3FF;
+
+  /* Status */
+  --c-ok: #16A34A;
+  --c-warn: #F59E0B;
+  --c-danger: #EF4444;
+
+  /* Bayangan */
+  --shadow-sm: 0 4px 14px rgba(11,23,38,.06);
+  --shadow-md: 0 12px 32px rgba(11,23,38,.08);
+  --shadow-lg: 0 24px 60px rgba(31,79,217,.18);
+
+  /* Tipografi */
+  --font: "Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+
+  /* Lain-lain */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --container: 1180px;
+  --nav-h: 72px;
+  --pa-primary: #1F4FD9;
+  --pa-primary-600: #1A45BF;
+  --pa-accent: #FF7A2D;
+  --pa-ink: #0B1726;
+  --pa-muted: #5B6B7E;
+  --pa-line: #E6EAF0;
+  --pa-bg-alt: #F6F8FC;
+  --pa-success: #16A34A;
+  --pa-danger: #EF4444;
+}

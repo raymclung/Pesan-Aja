@@ -3,47 +3,6 @@
    Booking jadi lebih rapi.
 ============================================================ */
 
-:root {
-  /* Brand */
-  --c-primary: #1F4FD9;
-  --c-primary-600: #1A45BF;
-  --c-primary-700: #153BA6;
-  --c-accent: #FF7A2D;
-  --c-accent-600: #ED6A1C;
-  --c-teal: #15B79E;
-
-  /* Ink & surfaces */
-  --c-ink: #0B1726;
-  --c-ink-2: #1B2738;
-  --c-muted: #5B6B7E;
-  --c-muted-2: #8492A6;
-  --c-line: #E6EAF0;
-  --c-line-2: #EEF2F7;
-  --c-bg: #FFFFFF;
-  --c-bg-alt: #F6F8FC;
-  --c-bg-soft: #EEF3FF;
-
-  /* Status */
-  --c-ok: #16A34A;
-  --c-warn: #F59E0B;
-
-  /* Radii & shadows */
-  --r-sm: 10px;
-  --r-md: 14px;
-  --r-lg: 20px;
-  --r-xl: 28px;
-  --shadow-sm: 0 4px 14px rgba(11,23,38,.06);
-  --shadow-md: 0 12px 32px rgba(11,23,38,.08);
-  --shadow-lg: 0 24px 60px rgba(31,79,217,.18);
-
-  /* Layout */
-  --container: 1180px;
-  --nav-h: 72px;
-
-  /* Type */
-  --font: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
-}
-
 /* ---------- Base ---------- */
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }

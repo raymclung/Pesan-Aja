@@ -61,14 +61,26 @@ Lalu buka `http://localhost:8000`.
 Membuka `index.html` dengan dobel-klik juga bisa, tapi service worker-nya tidak akan
 aktif karena protokol `file://` tidak mengizinkannya.
 
+## Soal CSS-nya
+
+Setiap halaman punya blok `<style>` sendiri, dan lama saya menganggap itu utang besar —
+pasti banyak aturan yang ditulis ulang di mana-mana.
+
+Ternyata setelah diukur, dugaan itu keliru. Dari 954 selector, hanya 27 yang muncul di
+tiga halaman atau lebih, dan 19 di antaranya justru punya isi berbeda — memang sengaja
+khusus per halaman. Yang benar-benar duplikat persis cuma 2% dari 119 KB.
+
+Jadi yang saya satukan hanya bagian yang memang layak: **37 token desain** — warna,
+bayangan, tipografi — yang tadinya dideklarasikan ulang di 13 halaman plus dua berkas
+CSS. Semuanya kini ada di `tokens.css`, dimuat paling awal di setiap halaman. Nilainya
+sudah identik sejak awal, jadi penyatuan ini tidak mengubah tampilan sama sekali;
+saya bandingkan tangkapan layar 20 halaman sebelum dan sesudah untuk memastikannya.
+
+Sisa CSS per halaman saya biarkan. Memindahkannya ke berkas bersama justru akan
+memperbesar unduhan tiap halaman tanpa menghilangkan pengulangan apa pun — karena
+pengulangannya memang tidak ada.
+
 ## Yang belum dikerjakan
-
-Yang paling mengganggu saya: **CSS-nya masih tercecer.** Dua puluh dari dua puluh dua
-halaman punya blok `<style>` inline sendiri, padahal sudah ada `style.css` dan `app.css`
-yang justru cuma dipakai beberapa halaman. Banyak aturan yang ditulis ulang. Ini yang
-paling ingin saya rapikan kalau ada waktu.
-
-Selain itu:
 
 - Belum ada backend, jadi data hilang kalau browser dibersihkan
 - Halaman masuk masih simulasi, belum ada autentikasi sungguhan
