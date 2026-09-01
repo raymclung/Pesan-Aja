@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Masuk / Daftar — PesanAja</title>
+<meta name="description" content="Masuk atau daftar ke PesanAja. Sistem booking online untuk UMKM dan platform pemesanan jasa untuk pelanggan." />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="manifest" href="manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+/* ============================================================
+   Login redesign — mockup-style modern card
+============================================================ */
+body{
+  background:#EEF2F7;
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(31,79,217,.08), transparent 35%),
+    radial-gradient(circle at 90% 80%, rgba(255,122,45,.08), transparent 35%);
+  min-height:100vh;
+}
+
+.auth-wrap{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:stretch;
+}
+
+/* === LEFT: brand panel (desktop only) === */
+.brand-panel{
+  background:linear-gradient(135deg,var(--c-primary) 0%,var(--c-primary-700) 100%);
+  color:#fff;
+  padding:48px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.brand-panel::before,
+.brand-panel::after{
+  content:'';position:absolute;border-radius:50%;
+}
+.brand-panel::before{
+  width:400px;height:400px;background:rgba(255,255,255,.06);top:-100px;right:-120px;
+}
+.brand-panel::after{
+  width:280px;height:280px;background:rgba(255,122,45,.18);bottom:-80px;left:-80px;
+}
+.brand-top{position:relative;z-index:2}
+.brand-logo-link{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;font-size:22px}
+.brand-logo-link img{width:38px;height:38px;border-radius:10px}
+.brand-logo-link .accent{color:#FFB088}
+
+.brand-hero{position:relative;z-index:2;max-width:440px}
+.brand-hero .eyebrow{
+  display:inline-block;background:rgba(255,255,255,.18);padding:6px 14px;
+  border-radius:99px;font-size:12px;font-weight:700;letter-spacing:.04em;margin-bottom:18px;
+}
+.brand-hero h1{
+  color:#fff;font-size:34px;font-weight:800;line-height:1.15;margin:0 0 14px;letter-spacing:-.02em;
+}
+.brand-hero h1 .grad{
+  background:linear-gradient(90deg,#FFB088,#fff);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.brand-hero p{font-size:15px;line-height:1.55;opacity:.92;margin:0 0 26px}
+.brand-bullets{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none}
+.brand-bullets li{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:600}
+.brand-bullets .ic{
+  width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.brand-bullets .ic svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.6}
+
+.brand-testimonial{
+  position:relative;z-index:2;background:rgba(255,255,255,.12);
+  backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);
+  border-radius:16px;padding:18px;
+}
+.brand-testimonial p{margin:0 0 12px;font-size:13.5px;line-height:1.5;font-style:italic}
+.brand-testimonial .person{display:flex;align-items:center;gap:10px}
+.brand-testimonial .avatar{
+  width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#FF7A2D,#ED6A1C);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;
+}
+.brand-testimonial .who strong{display:block;font-size:13px}
+.brand-testimonial .who .meta{font-size:11px;opacity:.8}
+
+/* === RIGHT: form panel === */
+.form-panel{
+  background:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 32px;
+}
+.form-panel-inner{width:100%;max-width:440px}
+
+.mobile-logo{display:none;text-align:center;margin-bottom:24px}
+.mobile-logo a{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:22px;color:var(--c-ink)}
+.mobile-logo img{width:36px;height:36px;border-radius:10px}
+.mobile-logo .accent{color:var(--c-accent)}
+
+.form-head{margin-bottom:24px}
+.form-head h2{font-size:26px;font-weight:800;margin:0 0 6px;letter-spacing:-.01em}
+.form-head p{color:var(--c-muted);font-size:14px;margin:0}
+
+/* Role toggle (signup only) */
+.role-toggle{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+  background:var(--c-bg-alt);border-radius:14px;padding:6px;margin-bottom:20px;
+}
+.role-btn{
+  padding:14px 12px;border-radius:10px;background:transparent;border:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  font-family:inherit;font-size:13px;font-weight:700;color:var(--c-muted);
+  transition:all .2s;
+}
+.role-btn .ic{font-size:22px;line-height:1}
+.role-btn.on{background:#fff;color:var(--c-primary);box-shadow:0 4px 12px rgba(11,23,38,.08)}
+
+/* Auth tabs (login/signup) */
+.auth-tabs{
+  display:flex;background:var(--c-bg-alt);border-radius:12px;padding:5px;margin-bottom:24px;
+}
+.auth-tab{
+  flex:1;padding:11px 0;border-radius:8px;background:transparent;border:none;cursor:pointer;
+  font-family:inherit;font-size:14px;font-weight:700;color:var(--c-muted);transition:.2s;
+}
+.auth-tab.on{background:#fff;color:var(--c-ink);box-shadow:0 4px 10px rgba(11,23,38,.06)}
+
+/* Form fields */
+.auth-form{display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field label{font-size:13px;font-weight:700;color:var(--c-ink-2)}
+.field-input{
+  position:relative;display:flex;align-items:center;
+  background:#fff;border:1.5px solid var(--c-line);border-radius:12px;
+  transition:border-color .2s,box-shadow .2s;
+}
+.field-input:focus-within{border-color:var(--c-primary);box-shadow:0 0 0 4px rgba(31,79,217,.1)}
+.field-input .ic{
+  padding:0 14px;color:var(--c-muted-2);display:flex;align-items:center;flex-shrink:0;
+}
+.field-input .ic svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+.field-input input,
+.field-input select{
+  flex:1;padding:13px 14px 13px 0;border:none;outline:none;
+  font-family:inherit;font-size:14px;background:transparent;color:var(--c-ink);
+  width:100%;min-width:0;
+}
+.field-input input::placeholder{color:var(--c-muted-2)}
+.field-input .toggle-pass{
+  background:none;border:none;color:var(--c-muted);padding:0 14px;cursor:pointer;font-size:13px;
+  font-weight:600;flex-shrink:0;
+}
+
+.row-between{display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.check{display:flex;align-items:center;gap:7px;cursor:pointer;color:var(--c-ink-2);font-weight:500}
+.check input{accent-color:var(--c-primary);width:16px;height:16px}
+.link{color:var(--c-primary);font-weight:700;text-decoration:none}
+.link:hover{text-decoration:underline}
+
+.btn-cta{
+  width:100%;padding:14px 0;border-radius:12px;border:none;background:var(--c-primary);color:#fff;
+  font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;
+  box-shadow:0 8px 22px rgba(31,79,217,.28);transition:.2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-cta:hover{background:var(--c-primary-600);transform:translateY(-1px)}
+.btn-cta:active{transform:translateY(0)}
+.btn-cta svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.4}
+
+.demo-hint{
+  margin:0;padding:10px 12px;background:#FFF8E6;border:1px dashed #F5C24B;
+  border-radius:10px;font-size:12px;color:#92400E;text-align:center;
+}
+
+.divider{
+  display:flex;align-items:center;gap:12px;color:var(--c-muted-2);
+  font-size:12px;font-weight:600;margin:8px 0;
+}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--c-line)}
+
+.btn-social{
+  width:100%;padding:13px 0;border-radius:12px;background:#fff;border:1.5px solid var(--c-line);
+  font-family:inherit;font-size:14px;font-weight:700;color:var(--c-ink);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;transition:.2s;
+}
+.btn-social:hover{background:var(--c-bg-alt);border-color:var(--c-muted-2)}
+.btn-social svg{width:20px;height:20px}
+
+.foot-switch{text-align:center;margin-top:20px;font-size:13.5px;color:var(--c-muted)}
+.foot-switch a{color:var(--c-primary);font-weight:700;text-decoration:none}
+
+.legal{text-align:center;margin-top:16px;font-size:11.5px;color:var(--c-muted-2);line-height:1.5}
+.legal a{color:var(--c-muted);text-decoration:underline}
+
+/* WhatsApp FAB */
+.wa-fab{
+  position:fixed;bottom:24px;right:24px;background:#25D366;color:#fff;
+  padding:12px 18px;border-radius:99px;display:flex;align-items:center;gap:8px;
+  box-shadow:0 10px 28px rgba(37,211,102,.4);text-decoration:none;font-weight:700;font-size:13px;
+  z-index:100;transition:transform .2s;
+}
+.wa-fab:hover{transform:scale(1.05)}
+.wa-fab svg{width:20px;height:20px;fill:#fff}
+
+/* === Responsive === */
+@media (max-width:900px){
+  .auth-wrap{grid-template-columns:1fr}
+  .brand-panel{display:none}
+  .mobile-logo{display:block}
+  .form-panel{padding:32px 20px;align-items:flex-start;padding-top:24px}
+  .form-head h2{font-size:22px}
+  .wa-fab span{display:none}
+  .wa-fab{padding:14px}
+}
+@media (max-width:480px){
+  .form-panel{padding:24px 18px}
+  .role-btn{padding:12px 8px;font-size:12px}
+  .role-btn .ic{font-size:20px}
+}
+
+.signup-only,.login-only,.merchant-only{display:none}
+.mode-login .login-only{display:flex}
+.mode-signup .signup-only{display:flex}
+.mode-signup.role-merchant .merchant-only{display:flex}
+</style>
+<link rel="stylesheet" href="app-polish.css" />
+</head>
+<body class="mode-login role-customer">
+
+<div class="auth-wrap">
+
+  <!-- LEFT: BRAND PANEL (desktop only) -->
+  <aside class="brand-panel">
+    <div class="brand-top">
+      <a href="index.html" class="brand-logo-link">
+        <img src="assets/logo.svg" alt="PesanAja" onerror="this.style.display='none'" />
+        <span>Pesan<span class="accent">Aja</span></span>
+      </a>
+    </div>
+
+    <div class="brand-hero">
+      <span class="eyebrow">Booking Online Indonesia</span>
+      <h1>Pesan lebih <span class="grad">cepat & rapi</span>, hidup lebih tenang.</h1>
+      <p>Booking salon, laundry, barber, dan jasa lain dalam hitungan detik. Pemilik usaha? Kelola pelanggan tanpa balas chat satu-satu.</p>
+      <ul class="brand-bullets">
+        <li><span class="ic"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>10.000+ pelanggan aktif setiap hari</li>
+        <li><span class="ic"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>1.500+ UMKM partner di Indonesia</li>
+        <li><span class="ic"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>Booking 24/7 tanpa antri chat</li>
+        <li><span class="ic"><svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg></span>Voucher & cashback setiap minggu</li>
+      </ul>
+    </div>
+
+    <div class="brand-testimonial">
+      <p>"Pelanggan saya naik 40% dalam 2 bulan setelah pakai PesanAja. Gak perlu balas chat WA satu-satu lagi."</p>
+      <div class="person">
+        <div class="avatar">BS</div>
+        <div class="who">
+          <strong>Bu Sari</strong>
+          <div class="meta">Owner Salon Melati · Bandung</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- RIGHT: FORM PANEL -->
+  <main class="form-panel">
+    <div class="form-panel-inner">
+
+      <div class="mobile-logo">
+        <a href="index.html">
+          <img src="assets/logo.svg" alt="" onerror="this.style.display='none'" />
+          <span>Pesan<span class="accent">Aja</span></span>
+        </a>
+      </div>
+
+      <div class="form-head">
+        <h2 id="formTitle">Selamat datang kembali</h2>
+        <p id="formSub">Masuk untuk lanjut pesan layanan favoritmu.</p>
+      </div>
+
+      <!-- Tab Login / Signup -->
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab on" data-tab="login" type="button">Masuk</button>
+        <button class="auth-tab" data-tab="signup" type="button">Daftar Gratis</button>
+      </div>
+
+      <!-- Role toggle (signup only) -->
+      <div class="role-toggle signup-only" role="radiogroup">
+        <button class="role-btn on" data-role="customer" type="button">
+          <span class="ic">👤</span>
+          Saya Pelanggan
+        </button>
+        <button class="role-btn" data-role="merchant" type="button">
+          <span class="ic">🏪</span>
+          Saya Punya Usaha
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form class="auth-form" id="authForm" onsubmit="handleSubmit(event)">
+
+        <!-- Nama (signup only) -->
+        <div class="field signup-only">
+          <label for="fullName" id="nameLabel">Nama Lengkap</label>
+          <div class="field-input">
+            <span class="ic">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+            </span>
+            <input id="fullName" type="text" placeholder="Nama lengkap Anda" />
+          </div>
+        </div>
+
+        <!-- Nama Usaha (signup + merchant only) -->
+        <div class="field merchant-only">
+          <label for="bizName">Nama Usaha</label>
+          <div class="field-input">
+            <span class="ic">
+              <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </span>
+            <input id="bizName" type="text" placeholder="Contoh: Salon Melati" />
+          </div>
+        </div>
+
+        <!-- Jenis Usaha (signup + merchant only) -->
+        <div class="field merchant-only">
+          <label for="bizType">Jenis Usaha</label>
+          <div class="field-input">
+            <span class="ic">
+              <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg>
+            </span>
+            <select id="bizType">
+              <option>💇 Salon & Spa</option>
+              <option>✂️ Barbershop</option>
+              <option>👕 Laundry</option>
+              <option>🧹 Cleaning Service</option>
+              <option>💪 Gym & Studio</option>
+              <option>🚗 Cuci Mobil/Motor</option>
+              <option>🍽️ Restoran & Kafe</option>
+              <option>💆 Pijat & Refleksi</option>
+              <option>📋 Jasa Lainnya</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Email / Nomor HP -->
+        <div class="field">
+          <label for="email">Email atau Nomor HP</label>
+          <div class="field-input">
+            <span class="ic">
+              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            </span>
+            <input id="email" type="text" placeholder="email@anda.com atau 08xx-xxxx" required />
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="field">
+          <label for="password">Kata Sandi</label>
+          <div class="field-input">
+            <span class="ic">
+              <svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+            </span>
+            <input id="password" type="password" placeholder="••••••••" required />
+            <button type="button" class="toggle-pass" onclick="togglePassword()">Lihat</button>
+          </div>
+        </div>
+
+        <!-- Konfirmasi Password (signup only) -->
+        <div class="field signup-only">
+          <label for="passwordConfirm">Konfirmasi Kata Sandi</label>
+          <div class="field-input">
+            <span class="ic">
+              <svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+            </span>
+            <input id="passwordConfirm" type="password" placeholder="••••••••" />
+          </div>
+        </div>
+
+        <!-- Remember + Forgot (login only) -->
+        <div class="row-between login-only">
+          <label class="check"><input type="checkbox" checked /> Ingat saya</label>
+          <a href="#" class="link" onclick="alert('Fitur reset password akan dikirim ke email Anda.');return false;">Lupa kata sandi?</a>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-cta" id="submitBtn">
+          <span id="submitLabel">Masuk</span>
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+
+        <p class="demo-hint">💡 <strong>Demo:</strong> Klik "Masuk" tanpa isi apa-apa untuk preview app</p>
+
+      </form>
+
+      <div class="divider">atau</div>
+
+      <button class="btn-social" type="button" onclick="alert('OAuth Google demo — di app asli akan terhubung ke Google.')">
+        <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Lanjutkan dengan Google
+      </button>
+
+      <p class="foot-switch login-only" style="display:block">
+        Belum punya akun? <a href="#" onclick="setMode('signup');return false;">Daftar gratis sekarang</a>
+      </p>
+      <p class="foot-switch signup-only">
+        Sudah punya akun? <a href="#" onclick="setMode('login');return false;">Masuk di sini</a>
+      </p>
+
+      <p class="legal">
+        Dengan lanjut, Anda menyetujui<br/>
+        <a href="#">Syarat & Ketentuan</a> dan <a href="#">Kebijakan Privasi</a> PesanAja.
+      </p>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- WhatsApp FAB -->
+<a class="wa-fab"
+   href="https://wa.me/6289523809060?text=Halo%20PesanAja%2C%20saya%20butuh%20bantuan%20untuk%20masuk%20%2F%20mendaftar."
+   target="_blank" rel="noopener" aria-label="Bantuan via WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.4M12 21.8h-.1c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4c-1-1.5-1.5-3.3-1.5-5.3 0-5.4 4.4-9.9 9.9-9.9 2.6 0 5.1 1 7 2.9 1.9 1.9 2.9 4.4 2.9 6.9 0 5.5-4.4 9.9-9.9 9.9m8.4-18.3A11.8 11.8 0 0 0 12 0C5.5 0 .2 5.3.2 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.6 1.4 5.7 1.4 6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.4z"/></svg>
+  <span>Tanya via WhatsApp</span>
+</a>
+
+<script>
+const body = document.body;
+const tabs = document.querySelectorAll('.auth-tab');
+const roleBtns = document.querySelectorAll('.role-btn');
+const formTitle = document.getElementById('formTitle');
+const formSub = document.getElementById('formSub');
+const submitLabel = document.getElementById('submitLabel');
+const nameLabel = document.getElementById('nameLabel');
+
+let currentMode = 'login';
+let currentRole = 'customer';
+
+function setMode(mode){
+  currentMode = mode;
+  body.classList.remove('mode-login','mode-signup');
+  body.classList.add('mode-' + mode);
+  tabs.forEach(t => t.classList.toggle('on', t.dataset.tab === mode));
+  updateCopy();
+}
+
+function setRole(role){
+  currentRole = role;
+  body.classList.remove('role-customer','role-merchant');
+  body.classList.add('role-' + role);
+  roleBtns.forEach(b => b.classList.toggle('on', b.dataset.role === role));
+  updateCopy();
+}
+
+function updateCopy(){
+  if (currentMode === 'signup'){
+    if (currentRole === 'merchant'){
+      formTitle.textContent = 'Daftarkan usaha Anda';
+      formSub.textContent = 'Gratis selamanya. Mulai terima booking dalam 5 menit.';
+      submitLabel.textContent = 'Daftar Usaha';
+      nameLabel.textContent = 'Nama Pemilik';
+    } else {
+      formTitle.textContent = 'Buat akun baru';
+      formSub.textContent = 'Daftar sekarang & dapat voucher 10% untuk booking pertama.';
+      submitLabel.textContent = 'Daftar Gratis';
+      nameLabel.textContent = 'Nama Lengkap';
+    }
+  } else {
+    formTitle.textContent = 'Selamat datang kembali';
+    formSub.textContent = 'Masuk untuk lanjut pesan layanan favoritmu.';
+    submitLabel.textContent = 'Masuk';
+  }
+}
+
+tabs.forEach(t => t.addEventListener('click', () => setMode(t.dataset.tab)));
+roleBtns.forEach(b => b.addEventListener('click', () => setRole(b.dataset.role)));
+
+function togglePassword(){
+  const pwd = document.getElementById('password');
+  const btn = pwd.nextElementSibling;
+  if (pwd.type === 'password'){
+    pwd.type = 'text'; btn.textContent = 'Tutup';
+  } else {
+    pwd.type = 'password'; btn.textContent = 'Lihat';
+  }
+}
+
+function handleSubmit(e){
+  e.preventDefault();
+  // Save user info to localStorage for use across pages
+  const fullName = document.getElementById('fullName');
+  const bizName = document.getElementById('bizName');
+  const emailVal = document.getElementById('email').value || 'demo@pesanaja.id';
+  const nameFromForm = (fullName && fullName.value) || (bizName && bizName.value) || '';
+  const fallbackName = emailVal.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+
+  const user = {
+    name: nameFromForm || fallbackName || 'Pelanggan',
+    email: emailVal,
+    phone: '+62 812-3456-7890',
+    role: currentRole,
+    loggedInAt: new Date().toISOString()
+  };
+  localStorage.setItem('pesanaja-user', JSON.stringify(user));
+
+  // Routing: merchant → app.html dashboard, customer → index.html marketplace
+  if (currentRole === 'merchant') {
+    window.location.href = 'app.html';
+  } else {
+    window.location.href = 'index.html';
+  }
+}
+
+// URL params: ?mode=signup&role=merchant
+const params = new URLSearchParams(window.location.search);
+if (params.get('mode') === 'signup') setMode('signup');
+if (params.get('role') === 'merchant') setRole('merchant');
+</script>
+
+<script src="app-polish.js"></script>
+</body>
+</html>

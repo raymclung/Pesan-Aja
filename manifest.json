@@ -2,8 +2,8 @@
   "name": "PesanAja — Booking Salon, Spa, Laundry & Lainnya",
   "short_name": "PesanAja",
   "description": "Cari salon, spa, klinik, laundry, sport, dan layanan lain di sekitar Anda. Booking dalam hitungan detik.",
-  "start_url": "/index.html",
-  "scope": "/",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#1F4FD9",
@@ -36,21 +36,21 @@
       "name": "Order Saya",
       "short_name": "Order",
       "description": "Lihat order yang sedang berjalan",
-      "url": "/orders.html",
+      "url": "./orders.html",
       "icons": [{ "src": "assets/favicon.svg", "sizes": "any" }]
     },
     {
       "name": "Cari Bisnis",
       "short_name": "Cari",
       "description": "Telusuri salon, spa, laundry, dll.",
-      "url": "/list-bisnis.html",
+      "url": "./list-bisnis.html",
       "icons": [{ "src": "assets/favicon.svg", "sizes": "any" }]
     },
     {
       "name": "Profil",
       "short_name": "Profil",
       "description": "Akun & pengaturan",
-      "url": "/profile.html",
+      "url": "./profile.html",
       "icons": [{ "src": "assets/favicon.svg", "sizes": "any" }]
     }
   ]

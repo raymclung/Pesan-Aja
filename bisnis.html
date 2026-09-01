@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PesanAja — Booking Jadi Lebih Rapi</title>
+  <meta name="description" content="PesanAja adalah sistem booking online untuk UMKM jasa: salon, barbershop, klinik, resto, gym, dan lainnya. Hentikan double booking, otomatiskan jadwal Anda." />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="app-polish.css" />
+</head>
+<body>
+
+  <!-- SVG ICON SPRITE (definitions only, hidden) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- Problem section -->
+      <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.2a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6A8.38 8.38 0 0 1 12.5 3a8.5 8.5 0 0 1 8.5 8.5z"/>
+        <line x1="8" y1="10" x2="14" y2="10"/>
+        <line x1="8" y1="13" x2="12" y2="13"/>
+      </symbol>
+      <symbol id="i-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </symbol>
+      <symbol id="i-notebook" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        <line x1="9" y1="7" x2="16" y2="7"/>
+        <line x1="9" y1="11" x2="14" y2="11"/>
+      </symbol>
+
+      <!-- Core features -->
+      <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <polyline points="12 7 12 12 15.5 14"/>
+      </symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="17" rx="2"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <path d="M8 14h2v2H8zM14 14h2v2h-2z"/>
+      </symbol>
+      <symbol id="i-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="5" width="20" height="14" rx="2"/>
+        <line x1="2" y1="10" x2="22" y2="10"/>
+        <line x1="6" y1="15" x2="10" y2="15"/>
+      </symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </symbol>
+      <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </symbol>
+      <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="20" x2="18" y2="10"/>
+        <line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6" y1="20" x2="6" y2="14"/>
+        <line x1="3" y1="20" x2="21" y2="20"/>
+      </symbol>
+
+      <!-- Advanced features -->
+      <symbol id="i-staff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M22 11l-3 3-2-2"/>
+      </symbol>
+      <symbol id="i-repeat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="17 1 21 5 17 9"/>
+        <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+        <polyline points="7 23 3 19 7 15"/>
+        <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+      </symbol>
+      <symbol id="i-palette" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="13.5" cy="6.5" r=".7" fill="currentColor"/>
+        <circle cx="17.5" cy="10.5" r=".7" fill="currentColor"/>
+        <circle cx="8.5" cy="7.5" r=".7" fill="currentColor"/>
+        <circle cx="6.5" cy="12.5" r=".7" fill="currentColor"/>
+        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.5-.7 1.5-1.5 0-.39-.15-.74-.39-1-.24-.27-.39-.62-.39-1 0-.83.67-1.5 1.5-1.5H16c3.31 0 6-2.69 6-6 0-4.97-4.5-9-10-9z"/>
+      </symbol>
+      <symbol id="i-ticket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v2z"/>
+        <line x1="13" y1="5" x2="13" y2="7"/>
+        <line x1="13" y1="11" x2="13" y2="13"/>
+        <line x1="13" y1="17" x2="13" y2="19"/>
+      </symbol>
+      <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </symbol>
+      <symbol id="i-queue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="6" cy="6" r="2"/>
+        <circle cx="6" cy="12" r="2"/>
+        <circle cx="6" cy="18" r="2"/>
+        <line x1="11" y1="6" x2="20" y2="6"/>
+        <line x1="11" y1="12" x2="18" y2="12"/>
+        <line x1="11" y1="18" x2="16" y2="18"/>
+      </symbol>
+      <symbol id="i-cal-sync" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="17" rx="2"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <path d="M9 14a3 3 0 0 1 5-2"/>
+        <polyline points="14 11 14 14 11 14"/>
+        <path d="M15 17a3 3 0 0 1-5 2"/>
+        <polyline points="10 20 10 17 13 17"/>
+      </symbol>
+      <symbol id="i-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="8" height="18" rx="1"/>
+        <rect x="13" y="8" width="8" height="13" rx="1"/>
+        <line x1="6" y1="7" x2="8" y2="7"/>
+        <line x1="6" y1="11" x2="8" y2="11"/>
+        <line x1="6" y1="15" x2="8" y2="15"/>
+        <line x1="16" y1="12" x2="18" y2="12"/>
+        <line x1="16" y1="16" x2="18" y2="16"/>
+      </symbol>
+      <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </symbol>
+
+      <!-- Target categories -->
+      <symbol id="i-resto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 2v7c0 1.66 1.34 3 3 3v10"/>
+        <path d="M9 2v8"/>
+        <path d="M6 2v8"/>
+        <path d="M18 2c-1.66 0-3 1.34-3 3v8h3v9"/>
+      </symbol>
+      <symbol id="i-salon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="6" cy="18" r="3"/>
+        <circle cx="18" cy="18" r="3"/>
+        <line x1="8.12" y1="15.88" x2="20" y2="4"/>
+        <line x1="15.88" y1="15.88" x2="4" y2="4"/>
+      </symbol>
+      <symbol id="i-clinic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <line x1="12" y1="8" x2="12" y2="16"/>
+        <line x1="8" y1="12" x2="16" y2="12"/>
+      </symbol>
+      <symbol id="i-field" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="12" y1="3" x2="12" y2="21"/>
+        <path d="M3 12c4-2 4-8 9-9"/>
+      </symbol>
+      <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12l9-9 9 9"/>
+        <path d="M5 10v10a1 1 0 0 0 1 1h3v-6h6v6h3a1 1 0 0 0 1-1V10"/>
+      </symbol>
+      <symbol id="i-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="2"/>
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+      </symbol>
+      <symbol id="i-gym" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 7v10"/>
+        <path d="M18 7v10"/>
+        <rect x="3" y="9" width="3" height="6" rx="1"/>
+        <rect x="18" y="9" width="3" height="6" rx="1"/>
+        <line x1="6" y1="12" x2="18" y2="12"/>
+      </symbol>
+      <symbol id="i-scissor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="6" cy="6" r="3"/>
+        <circle cx="6" cy="18" r="3"/>
+        <line x1="20" y1="4" x2="8.12" y2="15.88"/>
+        <line x1="14.47" y1="14.48" x2="20" y2="20"/>
+        <line x1="8.12" y1="8.12" x2="12" y2="12"/>
+      </symbol>
+      <symbol id="i-spa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2c0 5-3 7-3 10s3 5 3 5 3-2 3-5-3-5-3-10z"/>
+        <path d="M5 16c1 2 4 4 7 4s6-2 7-4"/>
+      </symbol>
+
+      <!-- Dashboard sidebar -->
+      <symbol id="i-today" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="17" rx="2"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <circle cx="12" cy="15" r="1.6" fill="currentColor"/>
+      </symbol>
+      <symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </symbol>
+
+      <!-- Brand mark -->
+      <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="4 12 10 18 20 6"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a class="brand" href="#hero" aria-label="PesanAja">
+        <img src="assets/logo.jpg" onerror="this.onerror=null;this.src='assets/logo.svg';" alt="" class="brand-logo" />
+        <span class="brand-text">Pesan<span class="brand-accent">Aja</span></span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#features">Fitur</a>
+        <a href="#pricing">Harga</a>
+        <a href="tentang.html">Tentang</a>
+        <a href="index.html" class="nl-customer">Cari Layanan</a>
+        <a href="login.html">Masuk</a>
+        <a href="login.html?mode=signup" class="btn btn-primary btn-sm">Coba Gratis</a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Buka menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="container hero-grid">
+      <div class="hero-text reveal">
+        <span class="eyebrow">Untuk Pemilik Bisnis Jasa / UMKM</span>
+        <h1>Booking <span class="grad">jadi lebih rapi</span>, bisnis terlihat profesional.</h1>
+        <p class="lead">
+          Stop balas chat satu-satu. Stop double booking. PesanAja bantu Anda atur jadwal pelanggan secara otomatis — 24 jam, tanpa ribet.
+        </p>
+        <div class="hero-cta">
+          <a href="login.html?mode=signup" class="btn btn-primary">Daftarkan Bisnis Gratis</a>
+          <a href="app.html" class="btn btn-ghost">Lihat Demo Dashboard →</a>
+        </div>
+        <p class="hero-customer-link">
+          Pelanggan yang cari layanan? <a href="index.html">Buka PesanAja Marketplace →</a>
+        </p>
+
+        <ul class="hero-stats">
+          <li><strong>24/7</strong><span>Pemesanan otomatis</span></li>
+          <li><strong>0</strong><span>Double booking</span></li>
+          <li><strong>1 link</strong><span>Sebarkan ke pelanggan</span></li>
+        </ul>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="phone-mock" aria-hidden="true">
+          <div class="phone-screen">
+            <div class="ps-header">
+              <div class="ps-avatar"></div>
+              <div>
+                <div class="ps-title">Salon Melati</div>
+                <div class="ps-sub">Pilih jadwal Anda</div>
+              </div>
+            </div>
+            <div class="ps-cal">
+              <div class="ps-day">Sen</div><div class="ps-day">Sel</div><div class="ps-day">Rab</div><div class="ps-day on">Kam</div><div class="ps-day">Jum</div><div class="ps-day">Sab</div><div class="ps-day">Min</div>
+              <div class="ps-date">12</div><div class="ps-date">13</div><div class="ps-date">14</div><div class="ps-date on">15</div><div class="ps-date">16</div><div class="ps-date">17</div><div class="ps-date">18</div>
+            </div>
+            <div class="ps-slots">
+              <div class="ps-slot">09:00</div>
+              <div class="ps-slot booked">10:00</div>
+              <div class="ps-slot on">11:00</div>
+              <div class="ps-slot">13:00</div>
+              <div class="ps-slot">14:00</div>
+              <div class="ps-slot booked">15:00</div>
+            </div>
+            <button class="ps-btn">Konfirmasi Booking</button>
+          </div>
+        </div>
+        <div class="floating-card f1">
+          <div class="dot ok"></div>
+          <div>
+            <div class="fc-title">Booking baru</div>
+            <div class="fc-sub">Andi — Cuci & Potong • 11:00</div>
+          </div>
+        </div>
+        <div class="floating-card f2">
+          <div class="dot warn"></div>
+          <div>
+            <div class="fc-title">Pengingat terkirim</div>
+            <div class="fc-sub">3 pelanggan h-1</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAYANAN ANDALAN (PesanAja branded verticals) -->
+  <section class="section brands" id="brands">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Layanan Andalan</span>
+        <h2>Satu aplikasi, <span class="grad">5 layanan utama</span> dalam genggaman</h2>
+        <p class="muted">Pelanggan PesanAja bisa langsung pesan layanan favorit mereka — semua terhubung ke sistem booking yang sama.</p>
+      </div>
+
+      <div class="brand-grid">
+        <a class="brand-card reveal" href="index.html">
+          <div class="brand-ic"><img src="assets/business/cleanaja.jpeg" alt="CleanAja" /></div>
+          <h3>CleanAja</h3>
+          <p>Cleaning service rumah, kantor &amp; kos.</p>
+        </a>
+        <a class="brand-card reveal" href="index.html">
+          <div class="brand-ic"><img src="assets/business/salonaja.jpeg" alt="SalonAja" /></div>
+          <h3>SalonAja</h3>
+          <p>Salon kecantikan &amp; perawatan rambut.</p>
+        </a>
+        <a class="brand-card reveal" href="index.html">
+          <div class="brand-ic"><img src="assets/business/sportaja.jpeg" alt="SportAja" /></div>
+          <h3>SportAja</h3>
+          <p>Sewa lapangan, gym &amp; kelas olahraga.</p>
+        </a>
+        <a class="brand-card reveal" href="index.html">
+          <div class="brand-ic"><img src="assets/business/laundryaja.jpeg" alt="LaundryAja" /></div>
+          <h3>LaundryAja</h3>
+          <p>Laundry kiloan dengan pickup &amp; delivery.</p>
+        </a>
+        <a class="brand-card reveal" href="index.html">
+          <div class="brand-ic"><img src="assets/business/barberaja.jpeg" alt="BarberAja" /></div>
+          <h3>BarberAja</h3>
+          <p>Barbershop dengan booking per barber.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGO STRIP / TRUST -->
+  <section class="trust">
+    <div class="container">
+      <p class="trust-label">Cocok untuk semua bisnis jasa</p>
+      <div class="trust-row">
+        <span><svg class="ic"><use href="#i-salon"/></svg>Salon</span>
+        <span><svg class="ic"><use href="#i-scissor"/></svg>Barbershop</span>
+        <span><svg class="ic"><use href="#i-resto"/></svg>Restoran</span>
+        <span><svg class="ic"><use href="#i-clinic"/></svg>Klinik</span>
+        <span><svg class="ic"><use href="#i-gym"/></svg>Gym &amp; Studio</span>
+        <span><svg class="ic"><use href="#i-field"/></svg>Sewa Lapangan</span>
+        <span><svg class="ic"><use href="#i-spa"/></svg>Spa</span>
+        <span><svg class="ic"><use href="#i-home"/></svg>Penyewaan</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DUAL SIDES — Untuk Bisnis vs Untuk Pelanggan -->
+  <section class="section" id="audience">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Dua Sisi PesanAja</span>
+        <h2>Anda <span class="grad">pemilik bisnis</span> atau <span class="grad">pelanggan</span>?</h2>
+        <p class="muted">PesanAja melayani keduanya dalam satu platform. Pilih jalur yang sesuai.</p>
+      </div>
+
+      <div class="dual-grid">
+        <article class="dual-card dual-business reveal">
+          <div class="dual-tag">UNTUK BISNIS</div>
+          <div class="dual-ic"><svg class="ic"><use href="#i-briefcase"/></svg></div>
+          <h3>Saya punya bisnis jasa</h3>
+          <p>Salon, klinik, barbershop, gym, restoran, atau bisnis jasa lain yang ingin atur booking pelanggan secara rapi &amp; otomatis.</p>
+          <ul class="dual-list">
+            <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Halaman booking publik untuk dibagikan</li>
+            <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Dashboard manajemen pelanggan &amp; jadwal</li>
+            <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Cegah double booking otomatis</li>
+            <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Notifikasi WhatsApp ke pelanggan</li>
+          </ul>
+          <div class="dual-cta">
+            <a href="login.html?mode=signup" class="btn btn-primary full">Daftarkan Bisnis Saya</a>
+            <a href="app.html" class="dual-secondary">atau lihat demo dashboard →</a>
+          </div>
+          <div class="dual-pricing">Mulai <strong>Gratis</strong> · Upgrade Rp 99rb/bulan</div>
+        </article>
+
+        <article class="dual-card dual-customer reveal">
+          <div class="dual-tag tag-orange">UNTUK PELANGGAN</div>
+          <div class="dual-ic dual-ic-orange"><svg class="ic"><use href="#i-search"/></svg></div>
+          <h3>Saya mau cari layanan</h3>
+          <p>Cari salon, spa, klinik, atau layanan jasa lainnya di sekitar Anda. Booking langsung tanpa chat bolak-balik, dapatkan promo eksklusif.</p>
+          <ul class="dual-list">
+            <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Ratusan bisnis terverifikasi</li>
+            <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Pilih jam dari kalender real-time</li>
+            <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Voucher &amp; promo eksklusif</li>
+            <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Pengingat otomatis via WhatsApp</li>
+          </ul>
+          <div class="dual-cta">
+            <a href="index.html" class="btn btn-orange full">Buka Marketplace</a>
+            <a href="booking.html?vertical=salon" class="dual-secondary">atau lihat contoh booking →</a>
+          </div>
+          <div class="dual-pricing">Gratis selamanya · <strong>10% off</strong> booking pertama</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="section" id="problem">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Masalah yang sering dialami</span>
+        <h2>Kenal masalah ini?</h2>
+        <p class="muted">Sebagian besar owner UMKM masih atur booking secara manual. Boros waktu, rawan kesalahan, dan terlihat tidak profesional.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card reveal">
+          <div class="card-icon ci-rose"><svg class="ic"><use href="#i-chat"/></svg></div>
+          <h3>Repot balas chat</h3>
+          <p>WhatsApp masuk sepanjang hari, harus dibalas satu per satu. Sering kelewat, pelanggan kabur.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon ci-amber"><svg class="ic"><use href="#i-warning"/></svg></div>
+          <h3>Double booking</h3>
+          <p>Dua pelanggan dijanjikan jam yang sama. Salah satu kecewa, reputasi rusak.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon ci-slate"><svg class="ic"><use href="#i-notebook"/></svg></div>
+          <h3>Jadwal di buku & kepala</h3>
+          <p>Tidak ada catatan terpusat. Saat staf ganti shift, jadwal pelanggan ikut hilang.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section alt" id="features">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Fitur Utama</span>
+        <h2>Semua yang Anda butuhkan, dalam satu platform</h2>
+      </div>
+
+      <div class="grid-3">
+        <div class="feature reveal">
+          <div class="feature-icon fi-blue"><svg class="ic"><use href="#i-clock"/></svg></div>
+          <h3>Pemesanan 24/7</h3>
+          <p>Pelanggan booking sendiri kapan saja — bahkan saat Anda tidur. Bisnis tetap jalan.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-orange"><svg class="ic"><use href="#i-calendar"/></svg></div>
+          <h3>Kalender Real-Time</h3>
+          <p>Slot terbooking langsung hilang dari kalender. Otomatis cegah double booking.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-teal"><svg class="ic"><use href="#i-card"/></svg></div>
+          <h3>Integrasi Pembayaran</h3>
+          <p>Terima DP atau bayar lunas via QRIS, e-wallet, atau transfer bank langsung.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-blue"><svg class="ic"><use href="#i-bell"/></svg></div>
+          <h3>Notifikasi Otomatis</h3>
+          <p>Konfirmasi & reminder dikirim otomatis ke pelanggan via WhatsApp/email.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-orange"><svg class="ic"><use href="#i-users"/></svg></div>
+          <h3>Manajemen Pelanggan</h3>
+          <p>Database pelanggan tersimpan rapi. Lihat riwayat, kontak, dan preferensi mereka.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-teal"><svg class="ic"><use href="#i-chart"/></svg></div>
+          <h3>Laporan & Analisis</h3>
+          <p>Lihat performa harian, mingguan, bulanan. Tahu jam ramai, jasa terlaris, omzet riil.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADVANCED FEATURES -->
+  <section class="section" id="features-more">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Lebih Banyak Lagi</span>
+        <h2>Fitur lanjutan untuk bisnis yang berkembang</h2>
+        <p class="muted">Semakin tumbuh bisnis Anda, semakin banyak yang bisa diatur lewat satu platform.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="feature reveal">
+          <div class="feature-icon fi-blue"><svg class="ic"><use href="#i-staff"/></svg></div>
+          <h3>Multi-Staf & Shift</h3>
+          <p>Atur jadwal beberapa staf sekaligus. Setiap staf punya kalender & layanan masing-masing.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-orange"><svg class="ic"><use href="#i-repeat"/></svg></div>
+          <h3>Booking Berulang</h3>
+          <p>Pelanggan langganan? Atur booking otomatis mingguan, bulanan, atau berkala lainnya.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-teal"><svg class="ic"><use href="#i-palette"/></svg></div>
+          <h3>Branding Sendiri</h3>
+          <p>Pasang logo & warna bisnis Anda di halaman booking. Pelanggan merasa di rumah.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-orange"><svg class="ic"><use href="#i-ticket"/></svg></div>
+          <h3>Promo & Voucher</h3>
+          <p>Buat kode diskon, paket promo, atau voucher hadiah. Naikkan konversi tanpa ribet.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-teal"><svg class="ic"><use href="#i-star"/></svg></div>
+          <h3>Review Pelanggan</h3>
+          <p>Pelanggan otomatis diminta beri rating setelah selesai. Bangun reputasi online Anda.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-blue"><svg class="ic"><use href="#i-queue"/></svg></div>
+          <h3>Walk-in & Antrean</h3>
+          <p>Pelanggan datang tanpa booking? Tambah langsung ke antrean dari dashboard Anda.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-teal"><svg class="ic"><use href="#i-cal-sync"/></svg></div>
+          <h3>Sinkron Google Calendar</h3>
+          <p>Jadwal booking masuk otomatis ke Google Calendar staf Anda. Tidak perlu duplikat input.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-blue"><svg class="ic"><use href="#i-building"/></svg></div>
+          <h3>Multi-Cabang</h3>
+          <p>Punya beberapa lokasi? Kelola semua cabang dalam satu dashboard terpusat.</p>
+        </div>
+        <div class="feature reveal">
+          <div class="feature-icon fi-orange"><svg class="ic"><use href="#i-download"/></svg></div>
+          <h3>Export Data</h3>
+          <p>Unduh laporan booking & pelanggan dalam format Excel/CSV kapan saja Anda butuh.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD PREVIEW -->
+  <section class="section alt" id="preview">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Dashboard</span>
+        <h2>Semua jadwal Anda, dalam satu layar</h2>
+        <p class="muted">Tampilan bersih, fokus pada apa yang penting untuk hari ini.</p>
+      </div>
+
+      <div class="dashboard-mock reveal">
+        <div class="dm-sidebar">
+          <div class="dm-brand">
+            <img src="assets/logo.jpg" onerror="this.onerror=null;this.src='assets/logo.svg';" alt="" />
+            <span>PesanAja</span>
+          </div>
+          <ul class="dm-menu">
+            <li class="on"><svg class="ic"><use href="#i-today"/></svg>Hari Ini</li>
+            <li><svg class="ic"><use href="#i-calendar"/></svg>Kalender</li>
+            <li><svg class="ic"><use href="#i-users"/></svg>Pelanggan</li>
+            <li><svg class="ic"><use href="#i-briefcase"/></svg>Layanan</li>
+            <li><svg class="ic"><use href="#i-staff"/></svg>Staf</li>
+            <li><svg class="ic"><use href="#i-chart"/></svg>Laporan</li>
+            <li><svg class="ic"><use href="#i-cog"/></svg>Pengaturan</li>
+          </ul>
+        </div>
+        <div class="dm-main">
+          <div class="dm-head">
+            <div>
+              <h3>Booking Hari Ini</h3>
+              <p class="muted small">Kamis, 15 Mei 2026</p>
+            </div>
+            <div class="dm-stats">
+              <div><strong>12</strong><span>Booking</span></div>
+              <div><strong>8</strong><span>Selesai</span></div>
+              <div><strong>Rp 1,8jt</strong><span>Omzet</span></div>
+            </div>
+          </div>
+          <div class="dm-list">
+            <div class="dm-row done">
+              <span class="dm-time">09:00</span>
+              <div class="dm-info"><strong>Andi Pratama</strong><span>Potong + Cuci • Eko</span></div>
+              <span class="dm-tag ok">Selesai</span>
+            </div>
+            <div class="dm-row done">
+              <span class="dm-time">10:00</span>
+              <div class="dm-info"><strong>Siti Rahma</strong><span>Creambath • Linda</span></div>
+              <span class="dm-tag ok">Selesai</span>
+            </div>
+            <div class="dm-row now">
+              <span class="dm-time">11:00</span>
+              <div class="dm-info"><strong>Budi Santoso</strong><span>Smoothing • Linda</span></div>
+              <span class="dm-tag now">Sedang berlangsung</span>
+            </div>
+            <div class="dm-row">
+              <span class="dm-time">13:00</span>
+              <div class="dm-info"><strong>Dewi Anggraini</strong><span>Manicure • Sari</span></div>
+              <span class="dm-tag soon">Berikutnya</span>
+            </div>
+            <div class="dm-row">
+              <span class="dm-time">14:00</span>
+              <div class="dm-info"><strong>Rudi Hartono</strong><span>Potong • Eko</span></div>
+              <span class="dm-tag soon">Terjadwal</span>
+            </div>
+            <div class="dm-row">
+              <span class="dm-time">15:30</span>
+              <div class="dm-info"><strong>Maya Putri</strong><span>Facial • Sari</span></div>
+              <span class="dm-tag soon">Terjadwal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Cara Kerja</span>
+        <h2>4 langkah, bisnis Anda siap menerima booking online</h2>
+      </div>
+
+      <ol class="steps">
+        <li class="step reveal">
+          <div class="step-num">1</div>
+          <h3>Daftar Bisnis</h3>
+          <p>Buat akun PesanAja, isi profil bisnis Anda. Gratis, tanpa kartu kredit.</p>
+        </li>
+        <li class="step reveal">
+          <div class="step-num">2</div>
+          <h3>Atur Layanan & Jadwal</h3>
+          <p>Masukkan daftar layanan, durasi, harga, dan jam operasional Anda.</p>
+        </li>
+        <li class="step reveal">
+          <div class="step-num">3</div>
+          <h3>Sebarkan Link Booking</h3>
+          <p>Bagikan link unik bisnis Anda di bio Instagram, WhatsApp, Google Maps.</p>
+        </li>
+        <li class="step reveal">
+          <div class="step-num">4</div>
+          <h3>Terima & Kelola Pesanan</h3>
+          <p>Booking masuk otomatis ke dashboard. Anda tinggal tunggu pelanggan datang.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- TARGET MARKET -->
+  <section class="section alt" id="target">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Untuk Siapa?</span>
+        <h2>Dipakai oleh bisnis jasa di seluruh Indonesia</h2>
+        <p class="muted">Mulai dari usaha 1 orang sampai bisnis multi-cabang.</p>
+      </div>
+
+      <div class="grid-4">
+        <div class="tag-card reveal"><span class="tc-ic"><svg class="ic"><use href="#i-resto"/></svg></span><h4>Restoran &amp; Kafe</h4><p>Reservasi meja per slot waktu.</p></div>
+        <div class="tag-card reveal"><span class="tc-ic"><svg class="ic"><use href="#i-salon"/></svg></span><h4>Salon &amp; Spa</h4><p>Jadwal stylist &amp; treatment.</p></div>
+        <div class="tag-card reveal"><span class="tc-ic"><svg class="ic"><use href="#i-clinic"/></svg></span><h4>Klinik Kesehatan</h4><p>Booking konsultasi dokter.</p></div>
+        <div class="tag-card reveal"><span class="tc-ic"><svg class="ic"><use href="#i-field"/></svg></span><h4>Sewa Lapangan</h4><p>Futsal, badminton, padel.</p></div>
+        <div class="tag-card reveal"><span class="tc-ic"><svg class="ic"><use href="#i-home"/></svg></span><h4>Penyewaan Properti</h4><p>Villa, ruang meeting, studio.</p></div>
+        <div class="tag-card reveal"><span class="tc-ic"><svg class="ic"><use href="#i-briefcase"/></svg></span><h4>Jasa Profesional</h4><p>Konsultan, fotografer, MUA.</p></div>
+        <div class="tag-card reveal"><span class="tc-ic"><svg class="ic"><use href="#i-gym"/></svg></span><h4>Gym &amp; Studio</h4><p>Kelas yoga, pilates, PT.</p></div>
+        <div class="tag-card reveal"><span class="tc-ic"><svg class="ic"><use href="#i-scissor"/></svg></span><h4>Barbershop</h4><p>Booking per barber &amp; jam.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUE PROP -->
+  <section class="section" id="value">
+    <div class="container value-grid">
+      <div class="reveal">
+        <span class="eyebrow">Kenapa PesanAja?</span>
+        <h2>Bisnis lebih rapi, pelanggan lebih senang, Anda lebih tenang.</h2>
+        <ul class="check-list">
+          <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Hemat waktu — tidak perlu balas chat satu per satu</li>
+          <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Hindari double booking secara otomatis</li>
+          <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Pelanggan bisa booking dari mana saja, kapan saja</li>
+          <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Dashboard terpusat — semua jadwal dalam satu layar</li>
+          <li><span class="cl-ic"><svg class="ic"><use href="#i-check"/></svg></span>Bisnis Anda terlihat lebih profesional di mata pelanggan</li>
+        </ul>
+      </div>
+      <div class="value-card reveal">
+        <div class="vc-header">
+          <div class="vc-avatar">BS</div>
+          <div>
+            <strong>Bu Sari, Owner Salon Melati</strong>
+            <div class="vc-sub">Bandung</div>
+          </div>
+        </div>
+        <p>"Dulu saya bisa balas WhatsApp sampai jam 11 malam. Sekarang booking masuk sendiri, saya tinggal lihat dashboard pas mau buka toko. <strong>Pelanggan saya naik 40% dalam 2 bulan</strong>."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section" id="testimonials">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Kata Owner Bisnis</span>
+        <h2>Yang dirasakan pengguna PesanAja</h2>
+        <p class="muted">Cerita dari pemilik bisnis jasa yang sudah menggunakan PesanAja untuk mengatur booking pelanggan mereka.</p>
+      </div>
+
+      <div class="testimonial-grid">
+        <article class="testimonial reveal">
+          <div class="t-stars" aria-label="5 dari 5">
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+          </div>
+          <blockquote>"Saya ingin pelanggan bisa booking sendiri tanpa harus chat bolak-balik. PesanAja jawabannya — sekarang jadwal salon saya rapi, dan saya bisa fokus melayani."</blockquote>
+          <div class="t-person">
+            <div class="t-avatar t-av-orange">SP</div>
+            <div>
+              <strong>Sarah Putri</strong>
+              <div class="t-meta">Pemilik Salon Kecantikan · 34 thn · Bandung</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="testimonial featured reveal">
+          <div class="t-stars" aria-label="5 dari 5">
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+          </div>
+          <blockquote>"Dulu saya balas WhatsApp sampai jam 11 malam. Sekarang booking masuk sendiri, saya tinggal cek dashboard pas mau buka toko. <strong>Pelanggan naik 40% dalam 2 bulan</strong>."</blockquote>
+          <div class="t-person">
+            <div class="t-avatar t-av-blue">BS</div>
+            <div>
+              <strong>Bu Sari</strong>
+              <div class="t-meta">Owner Salon Melati · Bandung</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="testimonial reveal">
+          <div class="t-stars" aria-label="5 dari 5">
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+          </div>
+          <blockquote>"Barbershop saya sekarang full booking tiap weekend. Pelanggan bisa pilih barber & jam sendiri. Tidak ada lagi yang protes karena kelewat jadwal."</blockquote>
+          <div class="t-person">
+            <div class="t-avatar t-av-teal">AK</div>
+            <div>
+              <strong>Andi Kurniawan</strong>
+              <div class="t-meta">Owner Barbershop Klasik · Jakarta</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON / POSITIONING -->
+  <section class="section alt" id="compare">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Posisi Kami</span>
+        <h2>Mudah seperti WhatsApp, profesional seperti aplikasi besar</h2>
+        <p class="muted">PesanAja berada di <em>sweet spot</em>: sederhana untuk pemula, tapi cukup lengkap untuk UMKM yang serius berkembang.</p>
+      </div>
+
+      <div class="compare-table reveal">
+        <div class="ct-row ct-head">
+          <div>Cara mengatur booking</div>
+          <div>Mudah dipakai</div>
+          <div>Cegah double booking</div>
+          <div>Terlihat profesional</div>
+          <div>Cocok untuk UMKM</div>
+        </div>
+        <div class="ct-row">
+          <div><strong>WhatsApp / Chat manual</strong></div>
+          <div data-label="Mudah dipakai"><span class="pill ok">Sangat mudah</span></div>
+          <div data-label="Cegah double booking"><span class="pill bad">Tidak</span></div>
+          <div data-label="Terlihat profesional"><span class="pill bad">Tidak</span></div>
+          <div data-label="Cocok untuk UMKM"><span class="pill warn">Terbatas</span></div>
+        </div>
+        <div class="ct-row">
+          <div><strong>Buku catatan manual</strong></div>
+          <div data-label="Mudah dipakai"><span class="pill ok">Mudah</span></div>
+          <div data-label="Cegah double booking"><span class="pill bad">Tidak</span></div>
+          <div data-label="Terlihat profesional"><span class="pill bad">Tidak</span></div>
+          <div data-label="Cocok untuk UMKM"><span class="pill bad">Sulit berkembang</span></div>
+        </div>
+        <div class="ct-row">
+          <div><strong>Aplikasi POS (Moka, Majoo)</strong></div>
+          <div data-label="Mudah dipakai"><span class="pill warn">Cukup</span></div>
+          <div data-label="Cegah double booking"><span class="pill warn">Terbatas</span></div>
+          <div data-label="Terlihat profesional"><span class="pill ok">Ya</span></div>
+          <div data-label="Cocok untuk UMKM"><span class="pill warn">Fokus restoran/retail</span></div>
+        </div>
+        <div class="ct-row">
+          <div><strong>Calendly / SimplyBook</strong></div>
+          <div data-label="Mudah dipakai"><span class="pill warn">Cukup kompleks</span></div>
+          <div data-label="Cegah double booking"><span class="pill ok">Ya</span></div>
+          <div data-label="Terlihat profesional"><span class="pill ok">Ya</span></div>
+          <div data-label="Cocok untuk UMKM"><span class="pill warn">Mahal & bahasa asing</span></div>
+        </div>
+        <div class="ct-row ct-us">
+          <div><strong>PesanAja</strong> <span class="tag">Rekomendasi</span></div>
+          <div data-label="Mudah dipakai"><span class="pill ok">Sangat mudah</span></div>
+          <div data-label="Cegah double booking"><span class="pill ok">Ya, otomatis</span></div>
+          <div data-label="Terlihat profesional"><span class="pill ok">Ya</span></div>
+          <div data-label="Cocok untuk UMKM"><span class="pill ok">Khusus UMKM Indonesia</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Harga</span>
+        <h2>Mulai gratis, upgrade saat Anda siap</h2>
+        <p class="muted">Tanpa biaya tersembunyi. Berhenti kapan saja.</p>
+      </div>
+
+      <div class="grid-3 pricing">
+        <div class="plan reveal">
+          <h3>Starter</h3>
+          <div class="price"><span class="amount">Gratis</span></div>
+          <p class="plan-sub">Untuk usaha yang baru mulai</p>
+          <ul class="plan-list">
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Sampai 30 booking/bulan</li>
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>1 staf / layanan</li>
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Notifikasi email</li>
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Halaman booking publik</li>
+          </ul>
+          <a href="#cta" class="btn btn-ghost full">Mulai Gratis</a>
+        </div>
+        <div class="plan featured reveal">
+          <div class="badge">Populer</div>
+          <h3>Bisnis</h3>
+          <div class="price"><span class="amount">Rp 99rb</span><span class="per">/bulan</span></div>
+          <p class="plan-sub">Untuk UMKM aktif</p>
+          <ul class="plan-list">
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Booking tanpa batas</li>
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Sampai 5 staf / layanan</li>
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Notifikasi WhatsApp otomatis</li>
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Integrasi pembayaran QRIS</li>
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Laporan &amp; analisis</li>
+          </ul>
+          <a href="#cta" class="btn btn-primary full">Coba 14 Hari Gratis</a>
+        </div>
+        <div class="plan reveal">
+          <h3>Pro</h3>
+          <div class="price"><span class="amount">Rp 249rb</span><span class="per">/bulan</span></div>
+          <p class="plan-sub">Untuk bisnis multi-cabang</p>
+          <ul class="plan-list">
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Semua fitur Bisnis</li>
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Multi-cabang &amp; multi-staf</li>
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Custom domain &amp; branding</li>
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>API &amp; integrasi lanjutan</li>
+            <li><svg class="ic pl-check"><use href="#i-check"/></svg>Prioritas support</li>
+          </ul>
+          <a href="#cta" class="btn btn-ghost full">Hubungi Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow center">Pertanyaan Umum</span>
+        <h2>Yang sering ditanyakan</h2>
+      </div>
+      <div class="faq">
+        <details class="reveal" open>
+          <summary>Apakah saya butuh website sendiri?</summary>
+          <p>Tidak. PesanAja langsung memberi Anda halaman booking publik dengan URL unik (contoh: pesanaja.id/salon-melati). Anda tinggal sebar link itu.</p>
+        </details>
+        <details class="reveal">
+          <summary>Apakah pelanggan harus install aplikasi?</summary>
+          <p>Tidak. Pelanggan cukup buka link booking dari browser HP atau komputer. Tanpa install, tanpa daftar akun.</p>
+        </details>
+        <details class="reveal">
+          <summary>Bagaimana dengan pembayaran?</summary>
+          <p>Anda bisa pilih: terima pembayaran online (QRIS, e-wallet, transfer) atau bayar di tempat. Fleksibel sesuai bisnis Anda.</p>
+        </details>
+        <details class="reveal">
+          <summary>Apakah ada kontrak jangka panjang?</summary>
+          <p>Tidak ada. Bayar bulanan, berhenti kapan saja. Atau pakai paket Starter selamanya tanpa biaya.</p>
+        </details>
+        <details class="reveal">
+          <summary>Saya tidak terlalu paham teknologi, apakah sulit?</summary>
+          <p>PesanAja dirancang untuk owner UMKM, bukan programmer. Setup awal cukup 10 menit, dan tim kami siap bantu via <a href="https://wa.me/6289523809060?text=Halo%20PesanAja%2C%20saya%20butuh%20bantuan%20setup%20akun." target="_blank" rel="noopener" class="auth-link">WhatsApp (+62 895-2380-9060)</a>.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band" id="cta">
+    <div class="container cta-inner reveal">
+      <h2>Siap bikin booking Anda lebih rapi?</h2>
+      <p>Daftar sekarang, gratis. Tidak perlu kartu kredit.</p>
+      <form class="cta-form" onsubmit="event.preventDefault(); document.getElementById('cta-msg').classList.add('on');">
+        <input type="email" required placeholder="Email Anda" aria-label="Email" />
+        <button type="submit" class="btn btn-primary">Mulai Gratis</button>
+      </form>
+      <p class="cta-msg" id="cta-msg"><svg class="ic"><use href="#i-check"/></svg> Terima kasih! Tim kami akan menghubungi Anda dalam 1×24 jam.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand brand-footer" href="#hero" aria-label="PesanAja">
+          <img src="assets/logo-full.jpg" alt="PesanAja — Sistem Booking &amp; Manajemen Bisnis" class="brand-full" />
+        </a>
+        <p class="muted small">Sistem booking online untuk UMKM Indonesia. Booking jadi lebih rapi.</p>
+      </div>
+      <div>
+        <h4>Untuk Bisnis</h4>
+        <a href="#features">Fitur</a>
+        <a href="#how">Cara Kerja</a>
+        <a href="#pricing">Harga</a>
+        <a href="app.html">Demo Dashboard</a>
+        <a href="login.html?mode=signup">Daftar Gratis</a>
+      </div>
+      <div>
+        <h4>Untuk Pelanggan</h4>
+        <a href="index.html">Marketplace</a>
+        <a href="index.html#kategori">Kategori Layanan</a>
+        <a href="booking.html?vertical=salon">Contoh Halaman Booking</a>
+        <a href="index.html">Voucher &amp; Promo</a>
+      </div>
+      <div>
+        <h4>Perusahaan</h4>
+        <a href="tentang.html">Tentang Kami</a>
+        <a href="tentang.html#team">Tim Kami</a>
+        <a href="#faq">FAQ</a>
+        <a href="#testimonials">Testimoni</a>
+      </div>
+      <div>
+        <h4>Kontak</h4>
+        <a href="mailto:halo@pesanaja.id">halo@pesanaja.id</a>
+        <a href="https://wa.me/6289523809060?text=Halo%20PesanAja%2C%20saya%20ingin%20bertanya%20tentang%20sistem%20booking%20online%20untuk%20bisnis%20saya." target="_blank" rel="noopener">WhatsApp Support</a>
+        <a href="#">Instagram</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <span>© <span id="year"></span> PesanAja. Dibuat di Indonesia.</span>
+        <span class="small muted">Booking Jadi Lebih Rapi.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp Contact -->
+  <a class="wa-fab"
+     href="https://wa.me/6289523809060?text=Halo%20PesanAja%2C%20saya%20ingin%20bertanya%20tentang%20sistem%20booking%20online%20untuk%20bisnis%20saya."
+     target="_blank" rel="noopener"
+     aria-label="Hubungi via WhatsApp">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <span class="wa-fab-text">Tanya via WhatsApp</span>
+  </a>
+
+  <script src="script.js"></script>
+<script src="app-polish.js"></script>
+</body>
+</html>

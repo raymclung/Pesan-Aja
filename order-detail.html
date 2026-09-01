@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#1F4FD9" />
+<title>PesanAja — Detail Pesanan</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="manifest" href="manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --c-primary:#1F4FD9;--c-primary-600:#1A45BF;--c-primary-700:#153BA6;
+  --c-accent:#FF7A2D;--c-accent-600:#ED6A1C;--c-teal:#15B79E;
+  --c-ink:#0B1726;--c-ink-2:#1B2738;--c-muted:#5B6B7E;--c-muted-2:#8492A6;
+  --c-line:#E6EAF0;--c-line-2:#EEF2F7;--c-bg:#FFFFFF;--c-bg-alt:#F6F8FC;--c-bg-soft:#EEF3FF;
+  --c-ok:#16A34A;--c-warn:#F59E0B;--c-danger:#EF4444;
+  --font:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:var(--font);color:var(--c-ink);background:var(--c-bg-alt)}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;padding:0}
+a{color:inherit;text-decoration:none}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--c-bg-alt);position:relative;padding-bottom:88px;box-shadow:0 0 60px rgba(11,23,38,.08)}
+@media (min-width:520px){
+  body{background:#EEF2F7;background-image:linear-gradient(rgba(31,79,217,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(31,79,217,.04) 1px,transparent 1px);background-size:24px 24px}
+}
+
+.subheader{
+  display:flex;align-items:center;gap:10px;padding:14px 20px;background:#fff;
+  border-bottom:1px solid var(--c-line-2);position:sticky;top:0;z-index:10;
+}
+.back-btn{
+  width:38px;height:38px;border-radius:50%;background:var(--c-bg-alt);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.back-btn svg{width:18px;height:18px;stroke:var(--c-ink);fill:none;stroke-width:2.4}
+.subheader h3{margin:0;font-size:16px;font-weight:800;flex:1}
+.share-btn svg{width:18px;height:18px;stroke:var(--c-ink-2);fill:none;stroke-width:2}
+
+/* Status hero card */
+.status-hero{
+  margin:14px;padding:22px;border-radius:18px;
+  background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));
+  color:#fff;position:relative;overflow:hidden;
+}
+.status-hero::before{
+  content:"";position:absolute;right:-30px;top:-30px;
+  width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.10);
+}
+.status-hero.done{background:linear-gradient(135deg,#16A34A,#15803D)}
+.status-hero.ongoing{background:linear-gradient(135deg,var(--c-accent),#E65520)}
+.status-hero.cancel{background:linear-gradient(135deg,#DC2626,#991B1B)}
+.sh-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.20);
+  padding:5px 12px;border-radius:99px;
+  font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  backdrop-filter:blur(4px);margin-bottom:12px;position:relative;z-index:1;
+}
+.sh-pill .pulse{width:7px;height:7px;border-radius:50%;background:#fff;animation:p 1.4s ease-in-out infinite}
+@keyframes p{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.6}}
+.status-hero h2{margin:0 0 4px;font-size:18px;font-weight:800;color:#fff;position:relative;z-index:1}
+.status-hero p{margin:0;font-size:13px;opacity:.92;position:relative;z-index:1}
+.sh-order-id{
+  display:inline-block;background:rgba(255,255,255,.20);
+  padding:5px 12px;border-radius:8px;margin-top:14px;
+  font-family:'Courier New',monospace;font-size:12px;font-weight:700;
+  backdrop-filter:blur(4px);position:relative;z-index:1;
+}
+
+/* Timeline */
+.card{background:#fff;margin:14px;border-radius:16px;padding:18px;border:1px solid var(--c-line-2)}
+.card h4{margin:0 0 14px;font-size:14px;font-weight:800;color:var(--c-ink)}
+.timeline{position:relative;padding-left:30px}
+.timeline::before{
+  content:"";position:absolute;left:10px;top:8px;bottom:8px;
+  width:2px;background:var(--c-line);
+}
+.tl-step{position:relative;padding-bottom:18px}
+.tl-step:last-child{padding-bottom:0}
+.tl-step::before{
+  content:"";position:absolute;left:-25px;top:4px;
+  width:14px;height:14px;border-radius:50%;
+  background:#fff;border:2px solid var(--c-line);
+}
+.tl-step.done::before{background:var(--c-ok);border-color:var(--c-ok)}
+.tl-step.current::before{
+  background:var(--c-primary);border-color:var(--c-primary);
+  box-shadow:0 0 0 4px rgba(31,79,217,.20);
+}
+.tl-step strong{display:block;font-size:13.5px;font-weight:700;color:var(--c-ink);margin-bottom:2px}
+.tl-step .time{font-size:11.5px;color:var(--c-muted)}
+.tl-step.current strong{color:var(--c-primary)}
+.tl-step.disabled strong,.tl-step.disabled .time{color:var(--c-muted-2)}
+
+/* Bisnis info row */
+.biz-row{display:flex;gap:12px;align-items:center}
+.biz-avatar{
+  width:54px;height:54px;border-radius:12px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;overflow:hidden;
+}
+.biz-avatar img{width:100%;height:100%;object-fit:cover}
+.biz-info{flex:1;min-width:0}
+.biz-info strong{display:block;font-size:14px;color:var(--c-ink);margin-bottom:2px}
+.biz-info .meta{font-size:11.5px;color:var(--c-muted)}
+.biz-info .meta .rating{color:var(--c-warn);font-weight:700}
+.biz-actions{display:flex;gap:8px;flex-shrink:0}
+.biz-actions .ic-btn{
+  width:38px;height:38px;border-radius:10px;background:var(--c-bg-soft);
+  color:var(--c-primary);display:flex;align-items:center;justify-content:center;
+}
+.biz-actions .ic-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+.biz-actions .ic-btn.wa{background:#DCFCE7;color:#16A34A}
+
+/* Detail rows */
+.row{display:flex;justify-content:space-between;padding:9px 0;font-size:13px;border-bottom:1px dashed var(--c-line-2)}
+.row:last-child{border-bottom:none}
+.row .label{color:var(--c-muted)}
+.row .value{color:var(--c-ink-2);font-weight:600;text-align:right}
+.row .value strong{color:var(--c-ink)}
+
+.svc-line{
+  display:flex;justify-content:space-between;padding:10px 0;
+  font-size:13px;border-bottom:1px solid var(--c-line-2);
+}
+.svc-line:last-child{border-bottom:none}
+.svc-line .name{flex:1;min-width:0;color:var(--c-ink-2)}
+.svc-line .name small{display:block;font-size:11px;color:var(--c-muted);margin-top:2px}
+.svc-line .amt{color:var(--c-ink);font-weight:700;flex-shrink:0;margin-left:10px}
+
+.total-row{
+  margin-top:8px;padding-top:12px;border-top:1px dashed var(--c-line);
+  display:flex;justify-content:space-between;font-size:15px;font-weight:800;
+}
+.total-row .amt{color:var(--c-primary)}
+
+/* QR / Code box */
+.qr-box{
+  margin-top:10px;background:var(--c-bg-alt);border-radius:12px;padding:14px;
+  text-align:center;
+}
+.qr-box .qr-fake{
+  width:120px;height:120px;margin:0 auto 10px;
+  background:#fff;border-radius:8px;
+  background-image:
+    linear-gradient(45deg, var(--c-ink) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--c-ink) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--c-ink) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--c-ink) 75%);
+  background-size:8px 8px;
+  background-position:0 0,0 4px,4px -4px,-4px 0;
+  border:6px solid #fff;
+  box-shadow:0 0 0 1px var(--c-line);
+}
+.qr-box strong{display:block;font-size:13px;color:var(--c-ink);margin-bottom:4px}
+.qr-box .code{
+  font-family:'Courier New',monospace;font-weight:800;font-size:15px;
+  letter-spacing:.08em;color:var(--c-primary);margin-top:6px;
+}
+.qr-box small{display:block;font-size:11px;color:var(--c-muted);margin-top:6px}
+
+/* CTA buttons */
+.cta-row{
+  display:flex;gap:8px;padding:14px;background:#fff;
+  border-top:1px solid var(--c-line-2);position:sticky;bottom:0;z-index:10;
+  margin-top:14px;
+}
+.cta-btn{
+  flex:1;padding:13px 0;border-radius:99px;
+  font-family:inherit;font-size:13.5px;font-weight:800;
+  border:1.5px solid var(--c-line);text-align:center;cursor:pointer;
+  transition:all .15s ease;
+}
+.cta-btn:active{transform:scale(.97)}
+.cta-btn.primary{background:var(--c-primary);color:#fff;border-color:var(--c-primary)}
+.cta-btn.danger{color:var(--c-danger);border-color:#FFE0E0}
+.cta-btn.wa{background:#25D366;color:#fff;border-color:#25D366}
+
+/* Bottom nav */
+.bottom-nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;background:#fff;border-top:1px solid var(--c-line);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));z-index:50;
+}
+.bottom-nav button{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:10.5px;font-weight:600;color:var(--c-muted-2);
+  flex:1;padding:6px 4px;position:relative;
+}
+.bottom-nav button.active{color:var(--c-primary)}
+.bottom-nav button.active::before{
+  content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+  width:28px;height:3px;background:var(--c-primary);border-radius:0 0 3px 3px;
+}
+.bottom-nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2}
+.bottom-nav button.active svg{stroke-width:2.4}
+</style>
+<link rel="stylesheet" href="app-polish.css" />
+</head>
+<body>
+
+<div class="app">
+  <div class="subheader">
+    <a href="orders.html"><button class="back-btn" aria-label="Kembali"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button></a>
+    <h3>Detail Pesanan</h3>
+    <button class="back-btn share-btn" aria-label="Bagikan"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg></button>
+  </div>
+
+  <!-- Status hero -->
+  <div class="status-hero" id="statusHero">
+    <span class="sh-pill"><span class="pulse"></span> <span id="shStatus">Akan Datang</span></span>
+    <h2 id="shTitle">Booking terjadwal</h2>
+    <p id="shSub">Datang ke salon 15 menit sebelum jadwal ya</p>
+    <div class="sh-order-id" id="shOrderId">#PSA-241105-A82B</div>
+  </div>
+
+  <!-- Bisnis info -->
+  <div class="card">
+    <div class="biz-row">
+      <div class="biz-avatar" id="bizAvatar" style="background:linear-gradient(135deg,#fda4af,#f43f5e)">💇</div>
+      <div class="biz-info">
+        <strong id="bizName">Salon Melati</strong>
+        <div class="meta"><span class="rating">★ 4.9</span> · 1.2 km · Cihampelas</div>
+      </div>
+      <div class="biz-actions">
+        <a class="ic-btn wa" href="inbox.html" aria-label="Chat">
+          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.2a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6A8.38 8.38 0 0 1 12.5 3a8.5 8.5 0 0 1 8.5 8.5z"/></svg>
+        </a>
+        <a class="ic-btn" href="detail-bisnis.html" aria-label="Lihat detail">
+          <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="card">
+    <h4>📍 Status Pesanan</h4>
+    <div class="timeline" id="timeline">
+      <div class="tl-step done">
+        <strong>Pesanan dibuat</strong>
+        <div class="time">Hari ini, 14:15</div>
+      </div>
+      <div class="tl-step done">
+        <strong>Pembayaran diterima</strong>
+        <div class="time">Hari ini, 14:16 · QRIS</div>
+      </div>
+      <div class="tl-step done">
+        <strong>Dikonfirmasi mitra</strong>
+        <div class="time">Hari ini, 14:18</div>
+      </div>
+      <div class="tl-step current">
+        <strong>Menunggu jadwal kunjungan</strong>
+        <div class="time" id="tlSchedule">Datang sesuai jadwal · Sen, 18 Mei 2026 · 14:30</div>
+      </div>
+      <div class="tl-step disabled">
+        <strong>Layanan selesai</strong>
+        <div class="time">Pending</div>
+      </div>
+      <div class="tl-step disabled">
+        <strong>Beri ulasan</strong>
+        <div class="time">Pending</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail booking -->
+  <div class="card">
+    <h4>📋 Detail Booking</h4>
+    <div class="row"><span class="label">Tanggal</span><span class="value" id="dDate">Sen, 18 Mei 2026</span></div>
+    <div class="row"><span class="label">Jam</span><span class="value" id="dTime"><strong>14:30 WIB</strong></span></div>
+    <div class="row"><span class="label" id="dStaffLabel">Stylist</span><span class="value" id="dStaff">Linda Dewi</span></div>
+    <div class="row"><span class="label">Estimasi durasi</span><span class="value" id="dDur">45 menit</span></div>
+    <div class="row"><span class="label">Lokasi</span><span class="value" id="dPlace">Datang ke salon</span></div>
+  </div>
+
+  <!-- Booking code / QR -->
+  <div class="card">
+    <h4>🎫 Tunjukkan kode ini ke mitra</h4>
+    <div class="qr-box">
+      <div class="qr-fake"></div>
+      <strong>Kode Booking</strong>
+      <div class="code" id="bookCode">PSA-A82B</div>
+      <small>Atau tunjukkan QR di atas ke kasir</small>
+    </div>
+  </div>
+
+  <!-- Rincian layanan -->
+  <div class="card">
+    <h4>💼 Rincian Layanan</h4>
+    <div id="svcList">
+      <div class="svc-line">
+        <div class="name">Potong Rambut Wanita<small>45 menit · Termasuk cuci & styling</small></div>
+        <div class="amt">Rp 75.000</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rincian pembayaran -->
+  <div class="card">
+    <h4>💳 Rincian Pembayaran</h4>
+    <div class="row"><span class="label">Subtotal layanan</span><span class="value" id="pSubtotal">Rp 75.000</span></div>
+    <div class="row"><span class="label">Biaya layanan platform</span><span class="value">Rp 2.000</span></div>
+    <div class="row"><span class="label">Diskon voucher PESANAJA10</span><span class="value" style="color:var(--c-ok)">-Rp 7.500</span></div>
+    <div class="total-row"><span>Total</span><span class="amt" id="pTotal">Rp 69.500</span></div>
+    <div class="row" style="margin-top:8px;border-top:1px dashed var(--c-line);padding-top:10px">
+      <span class="label">Metode pembayaran</span>
+      <span class="value"><strong>QRIS</strong> · GoPay</span>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-row" id="ctaRow">
+    <button class="cta-btn danger" onclick="if(confirm('Yakin ingin batalkan booking ini?')){alert('Booking dibatalkan. Dana akan dikembalikan ke saldo PesanAja.');location.href='orders.html'}">Batalkan</button>
+    <a class="cta-btn primary" id="reschedBtn" href="booking-flow.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center">Reschedule</a>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a href="index.html" style="display:contents"><button aria-label="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 12 12 4l9 8"/><path d="M5 10v10h14V10"/></svg>Home
+  </button></a>
+  <a href="orders.html" style="display:contents"><button class="active" aria-label="Order">
+    <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>Order
+  </button></a>
+  <a href="promo.html" style="display:contents"><button aria-label="Promo">
+    <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8V5a2 2 0 0 1 4 0v3M12 8V5a2 2 0 0 0-4 0v3"/></svg>Promo
+  </button></a>
+  <a href="inbox.html" style="display:contents"><button aria-label="Chat">
+    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.2a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6A8.38 8.38 0 0 1 12.5 3a8.5 8.5 0 0 1 8.5 8.5z"/></svg>Chat
+  </button></a>
+  <a href="profile.html" style="display:contents"><button aria-label="Profil">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profil
+  </button></a>
+</nav>
+
+<script>
+/* Per-vertical visuals + vocabulary so the order detail matches the booked
+   category (SportAja → ⚽, "Lapangan", "Datang ke arena" — not the salon defaults). */
+const VMETA = {
+  barber:  { emoji:'💈', grad:'linear-gradient(135deg,#6ee7b7,#10b981)', who:'Barber',      place:'Datang ke barbershop' },
+  salon:   { emoji:'💇', grad:'linear-gradient(135deg,#fda4af,#f43f5e)', who:'Stylist',     place:'Datang ke salon' },
+  spa:     { emoji:'💆', grad:'linear-gradient(135deg,#c4b5fd,#7c3aed)', who:'Therapist',   place:'Datang ke spa' },
+  clean:   { emoji:'🧹', grad:'linear-gradient(135deg,#7dd3fc,#0ea5e9)', who:'Tim Cleaner', place:'Tim datang ke alamat Anda' },
+  laundry: { emoji:'🧺', grad:'linear-gradient(135deg,#a5b4fc,#6366f1)', who:'Outlet',      place:'Pickup / antar ke outlet' },
+  wash:    { emoji:'🚗', grad:'linear-gradient(135deg,#a78bfa,#7c3aed)', who:'Petugas',     place:'Datang ke outlet cuci' },
+  sport:   { emoji:'⚽', grad:'linear-gradient(135deg,#5eead4,#0d9488)', who:'Lapangan',    place:'Datang ke arena' }
+};
+function inferVertical(biz){
+  biz = (biz || '').toLowerCase();
+  if (/barber/.test(biz)) return 'barber';
+  if (/spa/.test(biz)) return 'spa';
+  if (/clean/.test(biz)) return 'clean';
+  if (/laundry/.test(biz)) return 'laundry';
+  if (/wash|auto|cuci/.test(biz)) return 'wash';
+  if (/sport|arena|futsal|badminton|padel/.test(biz)) return 'sport';
+  return 'salon';
+}
+
+/* Read order ID from URL or use latest */
+const params = new URLSearchParams(window.location.search);
+const orderId = params.get('id');
+const orders = JSON.parse(localStorage.getItem('pesanaja-orders') || '[]');
+const order = orderId ? orders.find(o => o.id === orderId) : orders[0];
+
+if (order) {
+  document.getElementById('shOrderId').textContent = order.id;
+  document.getElementById('bizName').textContent = order.biz || 'Salon Melati';
+  document.getElementById('dDate').textContent = order.date || 'Sen, 18 Mei 2026';
+  document.getElementById('dTime').innerHTML = '<strong>' + (order.time || '14:30') + ' WIB</strong>';
+  document.getElementById('dStaff').textContent = order.staff || '-';
+
+  // Category-aware visuals + vocabulary
+  const vkey = order.verticalKey || inferVertical(order.biz);
+  const vm = VMETA[vkey] || VMETA.salon;
+  const avatar = document.getElementById('bizAvatar');
+  if (avatar) { avatar.textContent = vm.emoji; avatar.style.background = vm.grad; }
+  const staffLabel = document.getElementById('dStaffLabel');
+  if (staffLabel) staffLabel.textContent = vm.who;
+  const placeEl = document.getElementById('dPlace');
+  if (placeEl) placeEl.textContent = vm.place;
+  const tlEl = document.getElementById('tlSchedule');
+  if (tlEl) tlEl.textContent = vm.place + ' · ' + (order.date || '-') + ' · ' + (order.time || '-');
+  const resched = document.getElementById('reschedBtn');
+  if (resched) resched.href = 'booking.html?vertical=' + vkey;
+
+  // Services list
+  if (order.services && order.services.length > 0) {
+    const list = document.getElementById('svcList');
+    let total = 0, durTotal = 0;
+    list.innerHTML = order.services.map(s => {
+      total += s.price || 0;
+      durTotal += s.dur || 0;
+      return `<div class="svc-line">
+        <div class="name">${s.name}<small>${s.dur || 45} menit</small></div>
+        <div class="amt">Rp ${(s.price || 0).toLocaleString('id-ID')}</div>
+      </div>`;
+    }).join('');
+    if (durTotal > 0) {
+      const durEl = document.getElementById('dDur');
+      if (durEl) durEl.textContent = durTotal >= 60
+        ? (durTotal % 60 === 0 ? (durTotal/60) + ' jam' : Math.floor(durTotal/60) + ' jam ' + (durTotal%60) + ' menit')
+        : durTotal + ' menit';
+    }
+    const subtotal = total;
+    const discount = Math.round(subtotal * 0.1);
+    const fee = 2000;
+    const grandTotal = subtotal - discount + fee;
+    document.getElementById('pSubtotal').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
+    document.getElementById('pTotal').textContent = 'Rp ' + grandTotal.toLocaleString('id-ID');
+  }
+
+  document.getElementById('bookCode').textContent = 'PSA-' + (order.id || 'A82B').slice(-4).toUpperCase();
+
+  // Status hero
+  const hero = document.getElementById('statusHero');
+  const status = order.status || 'upcoming';
+  const statusMap = {
+    upcoming: { cls:'', label:'Akan Datang', title:'Booking terjadwal', sub:'Booking terjadwal — kami ingatkan menjelang waktunya 🙌' },
+    ongoing:  { cls:'ongoing', label:'Berlangsung', title:'Layanan sedang berlangsung', sub:'Mitra Anda sedang menyiapkan layanan' },
+    done:     { cls:'done', label:'Selesai', title:'Pesanan selesai', sub:'Terima kasih sudah memakai PesanAja 🙏' },
+    cancel:   { cls:'cancel', label:'Dibatalkan', title:'Pesanan dibatalkan', sub:'Refund akan diproses 1-3 hari kerja' }
+  };
+  const s = statusMap[status];
+  hero.classList.add(s.cls);
+  document.getElementById('shStatus').textContent = s.label;
+  document.getElementById('shTitle').textContent = s.title;
+  document.getElementById('shSub').textContent = s.sub;
+
+  // Update CTA based on status
+  if (status === 'done') {
+    const rp = `oid=${encodeURIComponent(order.id)}&biz=${encodeURIComponent(order.biz || '')}&svc=${encodeURIComponent((order.services || []).map(s => s.name).join(', '))}&cat=${encodeURIComponent(vm.emoji)}`;
+    document.getElementById('ctaRow').innerHTML = `
+      <a class="cta-btn" href="review.html?${rp}" style="text-decoration:none;display:flex;align-items:center;justify-content:center">Beri Rating ⭐</a>
+      <a class="cta-btn primary" href="index.html" style="text-decoration:none;display:flex;align-items:center;justify-content:center">Pesan Lagi</a>`;
+  } else if (status === 'cancel') {
+    document.getElementById('ctaRow').innerHTML = `
+      <a class="cta-btn primary" href="detail-bisnis.html" style="text-decoration:none;flex:1;display:flex;align-items:center;justify-content:center">Pesan Lagi</a>`;
+  }
+}
+</script>
+<script src="app-polish.js"></script>
+</body>
+</html>

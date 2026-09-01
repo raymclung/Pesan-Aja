@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#FF7A2D" />
+<title>PesanAja Pay — Saldo & Riwayat</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="manifest" href="manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --c-primary:#1F4FD9;--c-primary-600:#1A45BF;--c-primary-700:#153BA6;
+  --c-accent:#FF7A2D;--c-accent-600:#ED6A1C;--c-teal:#15B79E;
+  --c-ink:#0B1726;--c-ink-2:#1B2738;--c-muted:#5B6B7E;--c-muted-2:#8492A6;
+  --c-line:#E6EAF0;--c-line-2:#EEF2F7;--c-bg-alt:#F6F8FC;--c-bg-soft:#EEF3FF;
+  --c-ok:#16A34A;--c-warn:#F59E0B;--c-danger:#EF4444;
+  --font:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:var(--font);color:var(--c-ink);background:#EEF2F7}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;padding:0}
+a{color:inherit;text-decoration:none}
+
+.app-shell{max-width:480px;margin:0 auto;min-height:100vh;background:#fff;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(11,23,38,.08)}
+
+/* Hero */
+.wallet-hero{
+  background:linear-gradient(135deg,var(--c-accent),var(--c-accent-600));
+  padding:14px 20px 80px;color:#fff;position:relative;overflow:hidden;
+}
+.wallet-hero::before{
+  content:'';position:absolute;top:-80px;right:-80px;width:240px;height:240px;
+  background:rgba(255,255,255,.08);border-radius:50%;
+}
+.wallet-hero::after{
+  content:'';position:absolute;bottom:30px;left:-40px;width:120px;height:120px;
+  background:rgba(255,255,255,.06);border-radius:50%;
+}
+.hero-top{display:flex;align-items:center;gap:12px;position:relative;z-index:2}
+.hero-top button{
+  width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.22);
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-top svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.4}
+.hero-top h1{margin:0;font-size:16px;font-weight:800;color:#fff;flex:1}
+.hero-top .icon-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center}
+
+.balance-block{margin-top:20px;position:relative;z-index:2}
+.balance-block .lbl{font-size:12px;opacity:.9;display:flex;align-items:center;gap:6px;font-weight:600}
+.balance-block .lbl .eye{cursor:pointer;font-size:14px}
+.balance-block .amt{font-size:36px;font-weight:800;letter-spacing:-.02em;line-height:1;margin-top:6px}
+.balance-block .amt small{font-size:14px;opacity:.8;margin-left:4px}
+.balance-block .sub{display:flex;gap:12px;margin-top:8px;font-size:11.5px;opacity:.92}
+.balance-block .sub .item{display:flex;align-items:center;gap:5px}
+.balance-block .sub .item strong{color:#fff;font-weight:700}
+
+/* Quick actions (floats over hero) */
+.quick-actions{
+  margin:-56px 16px 0;background:#fff;border-radius:18px;padding:14px 8px;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:6px;
+  box-shadow:0 12px 32px rgba(11,23,38,.1);position:relative;z-index:5;
+}
+.qa{
+  display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 4px;
+  cursor:pointer;border-radius:10px;transition:background .15s;
+}
+.qa:hover{background:var(--c-bg-alt)}
+.qa .ic{
+  width:42px;height:42px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:20px;
+}
+.qa.ic-orange .ic{background:#FFE9DA;color:var(--c-accent)}
+.qa.ic-blue .ic{background:#E8F0FF;color:var(--c-primary)}
+.qa.ic-green .ic{background:#DCFCE7;color:var(--c-ok)}
+.qa.ic-purple .ic{background:#F0E8FF;color:#7C3AED}
+.qa .lbl{font-size:10.5px;font-weight:700;color:var(--c-ink-2);text-align:center;line-height:1.2}
+
+/* Promo banner */
+.promo-strip{
+  margin:16px 16px 0;background:var(--c-bg-soft);border:1px solid #BFD1FF;
+  border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;
+}
+.promo-strip .ic{font-size:24px;flex-shrink:0}
+.promo-strip .body{flex:1;min-width:0}
+.promo-strip h4{margin:0 0 2px;font-size:13px;font-weight:800;color:var(--c-primary)}
+.promo-strip p{margin:0;font-size:11.5px;color:var(--c-ink-2);line-height:1.4}
+.promo-strip .arrow{color:var(--c-primary)}
+
+/* Section title */
+.section-title{
+  padding:24px 20px 12px;display:flex;justify-content:space-between;align-items:center;
+}
+.section-title h3{margin:0;font-size:14px;font-weight:800}
+.section-title a{font-size:12px;color:var(--c-primary);font-weight:700;cursor:pointer}
+
+/* History tabs */
+.hist-tabs{
+  display:flex;gap:6px;padding:0 20px;border-bottom:1px solid var(--c-line-2);
+}
+.hist-tabs button{
+  padding:10px 14px;font-size:12.5px;font-weight:700;color:var(--c-muted);
+  border-bottom:2.5px solid transparent;margin-bottom:-1px;white-space:nowrap;
+}
+.hist-tabs button.active{color:var(--c-accent);border-bottom-color:var(--c-accent)}
+
+/* Transaction list */
+.tx-list{padding:8px 0 32px}
+.tx-day{padding:14px 20px 6px;font-size:11px;color:var(--c-muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.tx-item{
+  display:flex;align-items:center;gap:14px;padding:12px 20px;
+  border-bottom:1px solid var(--c-line-2);cursor:pointer;transition:background .12s;
+}
+.tx-item:hover{background:var(--c-bg-alt)}
+.tx-item .ic{
+  width:40px;height:40px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+}
+.tx-item .ic.in{background:#DCFCE7;color:var(--c-ok)}
+.tx-item .ic.out{background:#FEE2E2;color:var(--c-danger)}
+.tx-item .ic.topup{background:#E8F0FF;color:var(--c-primary)}
+.tx-item .ic.refund{background:#FEF3C7;color:var(--c-warn)}
+.tx-item .body{flex:1;min-width:0}
+.tx-item .ttl{font-size:13.5px;font-weight:700;color:var(--c-ink);margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tx-item .desc{font-size:11.5px;color:var(--c-muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tx-item .right{text-align:right;flex-shrink:0}
+.tx-item .amt{font-size:14px;font-weight:800;color:var(--c-ink)}
+.tx-item .amt.in{color:var(--c-ok)}
+.tx-item .amt.out{color:var(--c-danger)}
+.tx-item .time{font-size:10.5px;color:var(--c-muted-2);margin-top:2px}
+
+/* Empty state */
+.empty{text-align:center;padding:50px 20px;color:var(--c-muted)}
+.empty .emoji{font-size:48px;display:block;margin-bottom:10px;opacity:.5}
+.empty p{margin:0;font-size:13px}
+
+/* Topup modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(11,23,38,.65);backdrop-filter:blur(4px);
+  display:none;align-items:flex-end;justify-content:center;z-index:200;
+}
+.modal-overlay.show{display:flex;animation:fadein .2s}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.modal-sheet{
+  background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:480px;
+  padding:24px;animation:slideup .25s ease-out;max-height:88vh;overflow-y:auto;
+}
+@keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-sheet .handle{width:36px;height:4px;background:var(--c-line);border-radius:99px;margin:0 auto 18px}
+.modal-sheet h3{margin:0 0 16px;font-size:18px;font-weight:800;text-align:center}
+
+.topup-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.topup-grid button{
+  padding:14px 0;background:var(--c-bg-alt);border-radius:12px;font-weight:700;font-size:13px;
+  border:1.5px solid transparent;cursor:pointer;font-family:inherit;color:var(--c-ink-2);
+}
+.topup-grid button.active{background:#FFE9DA;color:var(--c-accent-600);border-color:var(--c-accent)}
+.topup-grid button:hover{background:var(--c-bg-soft)}
+
+.field-row{margin-bottom:14px}
+.field-row label{display:block;font-size:12.5px;font-weight:700;color:var(--c-ink-2);margin-bottom:6px}
+.field-row .field{
+  display:flex;align-items:center;background:#fff;border:1.5px solid var(--c-line);
+  border-radius:12px;padding:0 14px;
+}
+.field-row .field:focus-within{border-color:var(--c-accent)}
+.field-row .field span.rp{color:var(--c-muted);font-weight:700;margin-right:8px}
+.field-row .field input{
+  flex:1;padding:13px 0;border:none;outline:none;font-family:inherit;
+  font-size:15px;font-weight:700;color:var(--c-ink);
+}
+.btn-confirm{
+  width:100%;padding:14px 0;background:var(--c-accent);color:#fff;border-radius:12px;
+  font-weight:700;font-size:14px;box-shadow:0 6px 16px rgba(255,122,45,.32);
+}
+
+/* Payment methods */
+.pmt-list{margin:14px 0}
+.pmt-item{
+  display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--c-line);
+  border-radius:12px;margin-bottom:8px;cursor:pointer;
+}
+.pmt-item.selected{border-color:var(--c-accent);background:#FFFBF5}
+.pmt-item .logo{font-size:22px;width:38px;text-align:center}
+.pmt-item .label{flex:1;font-size:13px;font-weight:700}
+.pmt-item .check{
+  width:20px;height:20px;border-radius:50%;border:2px solid var(--c-line);
+}
+.pmt-item.selected .check{background:var(--c-accent);border-color:var(--c-accent);position:relative}
+.pmt-item.selected .check::after{
+  content:'';position:absolute;top:5px;left:6px;width:4px;height:8px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);
+}
+
+@media (min-width:900px){
+  body{padding:30px 0}
+  .app-shell{margin:0 auto;border-radius:24px;min-height:calc(100vh - 60px);overflow:hidden}
+}
+</style>
+<link rel="stylesheet" href="app-polish.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- Hero -->
+  <header class="wallet-hero">
+    <div class="hero-top">
+      <button onclick="history.back()" aria-label="Kembali">
+        <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <h1>PesanAja Pay</h1>
+      <button class="icon-btn" aria-label="Bantuan" onclick="alert('Pusat bantuan PesanAja Pay')">
+        <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2"><circle cx="12" cy="12" r="9"/><path d="M10 9a2 2 0 0 1 4 0c0 1-2 1.5-2 3M12 17h.01"/></svg>
+      </button>
+    </div>
+
+    <div class="balance-block">
+      <div class="lbl">Saldo Tersedia <span class="eye" id="eyeToggle">👁️</span></div>
+      <div class="amt" id="balanceAmt">Rp 124<small>.500</small></div>
+      <div class="sub">
+        <div class="item">⭐ <strong>1.247 poin</strong> · ≈ Rp 12.470</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Quick actions -->
+  <div class="quick-actions">
+    <button class="qa ic-orange" onclick="openTopupModal()">
+      <span class="ic">+</span>
+      <span class="lbl">Top Up</span>
+    </button>
+    <button class="qa ic-blue" onclick="alert('Transfer ke teman')">
+      <span class="ic">→</span>
+      <span class="lbl">Transfer</span>
+    </button>
+    <button class="qa ic-green" onclick="alert('Pay via QRIS')">
+      <span class="ic">⊞</span>
+      <span class="lbl">Bayar QRIS</span>
+    </button>
+    <button class="qa ic-purple" onclick="alert('Tarik ke rekening')">
+      <span class="ic">⤴</span>
+      <span class="lbl">Tarik Tunai</span>
+    </button>
+  </div>
+
+  <!-- Promo strip -->
+  <div class="promo-strip" onclick="alert('Cashback 5% setiap topup min. Rp 50.000')">
+    <span class="ic">🎁</span>
+    <div class="body">
+      <h4>Cashback 5% topup pertama!</h4>
+      <p>Min. topup Rp 50.000 · Berlaku s.d. 31 Mei 2026</p>
+    </div>
+    <span class="arrow">→</span>
+  </div>
+
+  <!-- Riwayat transaksi -->
+  <div class="section-title">
+    <h3>Riwayat Transaksi</h3>
+    <a onclick="alert('Filter & cari transaksi')">Filter</a>
+  </div>
+
+  <div class="hist-tabs">
+    <button class="active" data-tab="all">Semua</button>
+    <button data-tab="in">Masuk</button>
+    <button data-tab="out">Keluar</button>
+    <button data-tab="topup">Top Up</button>
+  </div>
+
+  <div class="tx-list" id="txList"></div>
+
+</div>
+
+<!-- Topup Modal -->
+<div class="modal-overlay" id="topupModal" onclick="if(event.target===this)closeTopupModal()">
+  <div class="modal-sheet">
+    <div class="handle"></div>
+    <h3>💰 Top Up Saldo</h3>
+
+    <div class="field-row">
+      <label>Pilih Nominal</label>
+      <div class="topup-grid">
+        <button onclick="setAmt(this,50000)">Rp 50rb</button>
+        <button onclick="setAmt(this,100000)" class="active">Rp 100rb</button>
+        <button onclick="setAmt(this,200000)">Rp 200rb</button>
+        <button onclick="setAmt(this,500000)">Rp 500rb</button>
+        <button onclick="setAmt(this,1000000)">Rp 1jt</button>
+        <button onclick="setAmt(this,2000000)">Rp 2jt</button>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <label>Atau Masukkan Sendiri (min. Rp 10.000)</label>
+      <div class="field">
+        <span class="rp">Rp</span>
+        <input id="topupAmt" type="number" value="100000" min="10000" />
+      </div>
+    </div>
+
+    <div class="field-row">
+      <label>Metode Pembayaran</label>
+      <div class="pmt-list">
+        <div class="pmt-item selected" onclick="selectPmt(this)">
+          <span class="logo">📱</span>
+          <span class="label">QRIS</span>
+          <span class="check"></span>
+        </div>
+        <div class="pmt-item" onclick="selectPmt(this)">
+          <span class="logo">🏦</span>
+          <span class="label">Transfer BCA Virtual Account</span>
+          <span class="check"></span>
+        </div>
+        <div class="pmt-item" onclick="selectPmt(this)">
+          <span class="logo">🏦</span>
+          <span class="label">Transfer Mandiri Virtual Account</span>
+          <span class="check"></span>
+        </div>
+        <div class="pmt-item" onclick="selectPmt(this)">
+          <span class="logo">💳</span>
+          <span class="label">Kartu Debit/Kredit</span>
+          <span class="check"></span>
+        </div>
+        <div class="pmt-item" onclick="selectPmt(this)">
+          <span class="logo">🏪</span>
+          <span class="label">Alfamart / Indomaret</span>
+          <span class="check"></span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-confirm" onclick="confirmTopup()">Lanjut Bayar</button>
+  </div>
+</div>
+
+<script>
+const TX = [
+  { date:'Hari Ini', items:[
+    { id:1, type:'out', icon:'💇', ttl:'Bayar booking Glamoria Salon', desc:'Hair Cut & Wash · #PAJ-20260517-001', amt:-67500, time:'14:30' },
+    { id:2, type:'in', icon:'🎁', ttl:'Cashback dari Booking', desc:'5% dari Rp 67.500', amt:+3375, time:'14:31' }
+  ]},
+  { date:'Kemarin', items:[
+    { id:3, type:'topup', icon:'+', ttl:'Top Up Saldo via QRIS', desc:'Berhasil', amt:+200000, time:'10:15' },
+    { id:4, type:'out', icon:'👕', ttl:'Bayar Laundry Express 24', desc:'Cuci 5kg · #PAJ-20260516-099', amt:-45000, time:'09:00' },
+    { id:9, type:'out', icon:'⚽', ttl:'Bayar SportAja Arena', desc:'Futsal Lapangan 1 · #PAJ-20260516-101', amt:-180000, time:'19:30' }
+  ]},
+  { date:'12 Mei 2026', items:[
+    { id:5, type:'refund', icon:'↩', ttl:'Refund booking dibatalkan', desc:'Barbershop Klasik · Dikembalikan ke saldo', amt:+85000, time:'18:22' },
+    { id:6, type:'out', icon:'✂️', ttl:'Bayar Barbershop Klasik', desc:'Hair Cut · #PAJ-20260512-088', amt:-85000, time:'11:00' }
+  ]},
+  { date:'5 Mei 2026', items:[
+    { id:7, type:'out', icon:'💇', ttl:'Bayar Glamoria Salon', desc:'Creambath Premium · #PAJ-20260505-072', amt:-120000, time:'15:00' },
+    { id:8, type:'topup', icon:'+', ttl:'Top Up via BCA VA', desc:'Berhasil', amt:+500000, time:'10:00' }
+  ]}
+];
+
+let currentTab = 'all';
+
+function fmt(n){
+  return 'Rp ' + Math.abs(n).toLocaleString('id-ID');
+}
+
+function renderTx(){
+  const list = document.getElementById('txList');
+  let html = '';
+  let totalShown = 0;
+  TX.forEach(group => {
+    const filtered = group.items.filter(t => {
+      if (currentTab === 'all') return true;
+      if (currentTab === 'in') return t.type === 'in' || t.type === 'refund';
+      if (currentTab === 'out') return t.type === 'out';
+      if (currentTab === 'topup') return t.type === 'topup';
+    });
+    if (filtered.length === 0) return;
+    html += `<div class="tx-day">${group.date}</div>`;
+    filtered.forEach(t => {
+      const cls = t.type === 'topup' ? 'topup' : t.type === 'refund' ? 'refund' : (t.amt > 0 ? 'in' : 'out');
+      const amtCls = t.amt > 0 ? 'in' : 'out';
+      const sign = t.amt > 0 ? '+' : '-';
+      html += `
+        <div class="tx-item" onclick="showTxDetail(${t.id})">
+          <div class="ic ${cls}">${t.icon}</div>
+          <div class="body">
+            <div class="ttl">${t.ttl}</div>
+            <div class="desc">${t.desc}</div>
+          </div>
+          <div class="right">
+            <div class="amt ${amtCls}">${sign}${fmt(t.amt)}</div>
+            <div class="time">${t.time}</div>
+          </div>
+        </div>
+      `;
+      totalShown++;
+    });
+  });
+
+  if (totalShown === 0){
+    html = `<div class="empty"><span class="emoji">📭</span><p>Belum ada transaksi ${currentTab !== 'all' ? 'kategori ini' : ''}</p></div>`;
+  }
+  list.innerHTML = html;
+}
+
+function showTxDetail(id){
+  const tx = TX.flatMap(g => g.items).find(t => t.id === id);
+  if (!tx) return;
+  alert(`Detail Transaksi\n\n${tx.ttl}\n${tx.desc}\n\nNominal: ${tx.amt > 0 ? '+' : '-'}${fmt(tx.amt)}\nWaktu: ${tx.time}`);
+}
+
+document.querySelectorAll('.hist-tabs button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.hist-tabs button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    currentTab = b.dataset.tab;
+    renderTx();
+  });
+});
+
+// Eye toggle (hide/show balance)
+let balanceHidden = false;
+const realAmt = 'Rp 124<small>.500</small>';
+document.getElementById('eyeToggle').addEventListener('click', () => {
+  balanceHidden = !balanceHidden;
+  const el = document.getElementById('balanceAmt');
+  document.getElementById('eyeToggle').textContent = balanceHidden ? '🙈' : '👁️';
+  el.innerHTML = balanceHidden ? 'Rp •••••' : realAmt;
+});
+
+// Topup
+function openTopupModal(){ document.getElementById('topupModal').classList.add('show'); }
+function closeTopupModal(){ document.getElementById('topupModal').classList.remove('show'); }
+function setAmt(btn, n){
+  document.querySelectorAll('.topup-grid button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('topupAmt').value = n;
+}
+function selectPmt(el){
+  document.querySelectorAll('.pmt-item').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function confirmTopup(){
+  const amt = parseInt(document.getElementById('topupAmt').value);
+  if (isNaN(amt) || amt < 10000) { alert('Minimum top up Rp 10.000'); return; }
+  closeTopupModal();
+  setTimeout(() => alert(`✓ Top up Rp ${amt.toLocaleString('id-ID')} berhasil!\n\nSaldo baru: Rp ${(124500 + amt).toLocaleString('id-ID')}`), 200);
+}
+
+// Auto-open if ?action=topup
+if (new URLSearchParams(location.search).get('action') === 'topup') {
+  setTimeout(openTopupModal, 200);
+}
+
+renderTx();
+</script>
+
+<script src="app-polish.js"></script>
+</body>
+</html>

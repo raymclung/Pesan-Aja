@@ -1,0 +1,9 @@
+# Seragamkan akhir baris: LF di dalam repositori
+* text=auto eol=lf
+
+# Berkas biner — jangan pernah dikonversi
+*.jpg  binary
+*.jpeg binary
+*.png  binary
+*.svg  text eol=lf
+*.ico  binary

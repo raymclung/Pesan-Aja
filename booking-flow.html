@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mengalihkan… — PesanAja</title>
+  <meta name="robots" content="noindex" />
+  <style>
+    body { font-family: "Plus Jakarta Sans", system-ui, sans-serif; background: #F6F8FC; color: #0B1726; display: grid; place-items: center; height: 100vh; margin: 0; }
+    .box { text-align: center; padding: 32px 28px; background: #fff; border-radius: 18px; box-shadow: 0 12px 32px rgba(11,23,38,.08); max-width: 360px; }
+    .sp { width: 36px; height: 36px; border: 4px solid #E6EAF0; border-top-color: #1F4FD9; border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 14px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    a { color: #1F4FD9; }
+  </style>
+<link rel="manifest" href="manifest.json" />
+<link rel="stylesheet" href="app-polish.css" />
+</head>
+<body>
+  <div class="box">
+    <div class="sp"></div>
+    <strong>Menyiapkan booking Anda…</strong>
+    <p style="margin:8px 0 0;color:#5B6B7E;font-size:13px">Jika tidak otomatis pindah, <a href="booking.html?vertical=salon" id="fallback">klik di sini</a>.</p>
+  </div>
+  <script>
+    // Legacy entry — figure out the vertical from session/URL and forward
+    // to the new schema-driven flow (booking.html?vertical=X).
+    (function () {
+      const validVerticals = ['barber','salon','spa','clean','laundry','wash','sport'];
+      const fromUrl  = new URLSearchParams(location.search).get('vertical');
+      const fromSess = sessionStorage.getItem('pesanaja-cat');
+      const vertical = validVerticals.includes(fromUrl)  ? fromUrl
+                     : validVerticals.includes(fromSess) ? fromSess
+                     : 'salon';
+      const target = 'booking.html?vertical=' + vertical;
+      document.getElementById('fallback').setAttribute('href', target);
+      setTimeout(() => { location.replace(target); }, 250);
+    })();
+  </script>
+<script src="app-polish.js"></script>
+</body>
+</html>

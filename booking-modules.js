@@ -23,7 +23,7 @@ const BARBER = {
   brandName: "Barbershop Klasik",
   brandSubtitle: "Booking barber profesional, langsung dapat jam.",
   brandHue: "orange",
-  icon: "pgn/barberaja.jpeg",
+  icon: "assets/business/barberaja.jpeg",
   meta: { location: "Jl. Riau No. 45, Bandung", rating: 4.8, hours: "09:00 – 21:00" },
   catalog: {
     services: [
@@ -58,7 +58,7 @@ const SALON = {
   brandName: "Salon Melati",
   brandSubtitle: "Salon kecantikan dengan layanan lengkap. Berdiri sejak 2018.",
   brandHue: "pink",
-  icon: "pgn/salonaja.jpeg",
+  icon: "assets/business/salonaja.jpeg",
   meta: { location: "Jl. Sukajadi No. 22, Bandung", rating: 4.9, hours: "09:00 – 20:00" },
   catalog: {
     services: [
@@ -96,7 +96,7 @@ const SPA = {
   brandName: "Asana Bali Spa",
   brandSubtitle: "Spa dengan nuansa Bali. Pijat tradisional & modern.",
   brandHue: "rose",
-  icon: "pgn/cleanaja.jpeg", // (using placeholder icon; design has SpaAja in marketplace)
+  icon: "assets/business/cleanaja.jpeg", // (using placeholder icon; design has SpaAja in marketplace)
   meta: { location: "Jl. Dago No. 88, Bandung", rating: 4.7, hours: "10:00 – 22:00" },
   catalog: {
     services: [
@@ -139,7 +139,7 @@ const CLEAN = {
   brandName: "CleanAja Sparkle",
   brandSubtitle: "Cleaning service profesional. Rumah, kantor, kos.",
   brandHue: "blue",
-  icon: "pgn/cleanaja.jpeg",
+  icon: "assets/business/cleanaja.jpeg",
   meta: { location: "Layanan area Bandung Raya", rating: 4.8, hours: "08:00 – 19:00" },
   catalog: {
     services: [
@@ -182,7 +182,7 @@ const LAUNDRY = {
   brandName: "LaundryAja Sebening",
   brandSubtitle: "Laundry kiloan dengan pickup & delivery gratis.",
   brandHue: "indigo",
-  icon: "pgn/laundryaja.jpeg",
+  icon: "assets/business/laundryaja.jpeg",
   meta: { location: "Jl. Cihampelas No. 12, Bandung", rating: 4.9, hours: "07:00 – 22:00" },
   catalog: {
     services: [
@@ -219,7 +219,7 @@ const WASH = {
   brandName: "WashAja Auto Care",
   brandSubtitle: "Cuci kendaraan profesional. Antri online, hemat waktu.",
   brandHue: "purple",
-  icon: "pgn/cleanaja.jpeg", // share icon
+  icon: "assets/business/cleanaja.jpeg", // share icon
   meta: { location: "Jl. Asia Afrika No. 100, Bandung", rating: 4.7, hours: "07:00 – 21:00" },
   catalog: {
     vehicles: [
@@ -261,7 +261,7 @@ const SPORT = {
   brandName: "SportAja Arena",
   brandSubtitle: "Sewa lapangan futsal, badminton, padel — real-time slot.",
   brandHue: "teal",
-  icon: "pgn/sportaja.jpeg",
+  icon: "assets/business/sportaja.jpeg",
   meta: { location: "Jl. Soekarno-Hatta No. 50, Bandung", rating: 4.8, hours: "06:00 – 23:00" },
   catalog: {
     venues: [
