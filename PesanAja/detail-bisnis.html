@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#1F4FD9" />
+<title>PesanAja — Salon Melati</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="manifest" href="manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --c-primary:#1F4FD9;--c-primary-600:#1A45BF;--c-primary-700:#153BA6;
+  --c-accent:#FF7A2D;--c-accent-600:#ED6A1C;--c-teal:#15B79E;
+  --c-ink:#0B1726;--c-ink-2:#1B2738;--c-muted:#5B6B7E;--c-muted-2:#8492A6;
+  --c-line:#E6EAF0;--c-line-2:#EEF2F7;--c-bg:#FFFFFF;--c-bg-alt:#F6F8FC;--c-bg-soft:#EEF3FF;
+  --c-ok:#16A34A;--c-warn:#F59E0B;--c-danger:#EF4444;
+  --shadow-sm:0 4px 14px rgba(11,23,38,.06);
+  --shadow-md:0 12px 32px rgba(11,23,38,.08);
+  --font:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:var(--font);color:var(--c-ink);background:#fff}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;padding:0}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+.app{
+  max-width:480px;margin:0 auto;min-height:100vh;background:#fff;
+  position:relative;padding-bottom:92px;
+  box-shadow:0 0 60px rgba(11,23,38,.08);
+}
+@media (min-width:520px){
+  body{background:#EEF2F7;background-image:linear-gradient(rgba(31,79,217,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(31,79,217,.04) 1px,transparent 1px);background-size:24px 24px}
+}
+
+/* HERO */
+.detail-hero{
+  height:240px;
+  background:linear-gradient(135deg,#fda4af,#f43f5e);
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  font-size:90px;color:#fff;
+}
+.detail-back,.detail-fav{
+  position:absolute;top:16px;
+  width:42px;height:42px;background:rgba(255,255,255,.95);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;backdrop-filter:blur(4px);
+}
+.detail-back{left:16px}
+.detail-fav{right:16px}
+.detail-back svg,.detail-fav svg{
+  width:18px;height:18px;stroke:var(--c-ink);fill:none;stroke-width:2.4;
+}
+.detail-fav.on svg{stroke:var(--c-danger);fill:var(--c-danger)}
+.detail-imgs{
+  position:absolute;bottom:14px;right:14px;
+  background:rgba(0,0,0,.55);color:#fff;
+  font-size:11px;padding:5px 12px;border-radius:99px;
+  font-weight:600;backdrop-filter:blur(4px);
+}
+
+/* INFO */
+.detail-info{
+  padding:18px 20px;background:#fff;
+  border-bottom:8px solid var(--c-bg-alt);
+}
+.detail-info h2{margin:0 0 8px;font-size:22px;font-weight:800}
+.detail-info .meta{
+  display:flex;align-items:center;gap:14px;font-size:12.5px;
+  color:var(--c-muted);margin-bottom:8px;flex-wrap:wrap;
+}
+.detail-info .meta .rating{color:var(--c-warn);font-weight:700}
+.status-open{
+  display:inline-flex;align-items:center;gap:5px;
+  background:#DCFCE7;color:#15803D;
+  font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:99px;
+}
+.status-open .pulse{
+  width:6px;height:6px;background:var(--c-ok);border-radius:50%;
+  animation:pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.5}}
+
+/* TAB BAR */
+.tab-bar{
+  display:flex;border-bottom:1px solid var(--c-line);
+  background:#fff;position:sticky;top:0;z-index:10;
+}
+.tab-bar button{
+  flex:1;padding:14px 0;font-size:13.5px;font-weight:700;color:var(--c-muted);
+  border-bottom:2.5px solid transparent;
+  transition:color .15s ease,border-color .15s ease;
+}
+.tab-bar button.active{color:var(--c-primary);border-bottom-color:var(--c-primary)}
+
+/* TAB CONTENT */
+.tab-content{padding:14px 20px}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* SERVICE LIST */
+.service-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 0;border-bottom:1px solid var(--c-line-2);
+}
+.service-item:last-child{border-bottom:none}
+.service-item .info h5{margin:0 0 3px;font-size:14px;font-weight:700}
+.service-item .info .dur{font-size:11.5px;color:var(--c-muted)}
+.service-item .right{text-align:right}
+.service-item .price{font-size:14px;font-weight:800;color:var(--c-ink);margin-bottom:6px}
+.service-item .add{
+  background:var(--c-primary);color:#fff;
+  padding:7px 16px;border-radius:99px;
+  font-size:12px;font-weight:800;cursor:pointer;
+}
+.service-item .add:active{transform:scale(.96)}
+
+/* REVIEWS TAB */
+.review-summary{
+  background:var(--c-bg-alt);border-radius:14px;padding:16px;
+  display:flex;align-items:center;gap:18px;margin-bottom:16px;
+}
+.review-summary .big{font-size:36px;font-weight:800;color:var(--c-warn);line-height:1}
+.review-summary .info small{color:var(--c-muted);font-size:11px}
+.review-summary .info strong{display:block;font-size:14px;color:var(--c-ink);margin-bottom:2px}
+.review-bar{display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:4px}
+.review-bar span:first-child{width:14px;color:var(--c-muted)}
+.review-bar .track{flex:1;height:5px;background:var(--c-line);border-radius:99px;overflow:hidden}
+.review-bar .fill{height:100%;background:var(--c-warn);border-radius:99px}
+
+.review-item{padding:14px 0;border-bottom:1px solid var(--c-line-2)}
+.review-item:last-child{border-bottom:none}
+.review-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.review-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--c-primary),#3A78E0);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:13px;flex-shrink:0;
+}
+.review-head .name{font-size:13px;font-weight:700}
+.review-head .date{font-size:11px;color:var(--c-muted)}
+.review-stars{color:var(--c-warn);font-size:11px;margin-bottom:4px}
+.review-text{font-size:13px;color:var(--c-ink-2);line-height:1.5;margin:0}
+
+/* INFO TAB */
+.info-block{padding:12px 0;border-bottom:1px solid var(--c-line-2)}
+.info-block:last-child{border-bottom:none}
+.info-block strong{display:block;font-size:13px;color:var(--c-ink);margin-bottom:6px}
+.info-block p{margin:0;font-size:13px;color:var(--c-ink-2);line-height:1.5}
+.info-hours{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+.wa-contact-btn{
+  display:inline-flex;align-items:center;gap:8px;margin-top:12px;
+  background:#25D366;color:#fff;padding:10px 18px;border-radius:99px;
+  text-decoration:none;font-size:13px;font-weight:700;
+  box-shadow:0 4px 14px rgba(37,211,102,.35);transition:transform .15s;
+}
+.wa-contact-btn:hover{transform:translateY(-1px);background:#1FAE54}
+.wa-contact-btn svg{flex-shrink:0}
+.info-hours .day{color:var(--c-ink-2);font-weight:600}
+.info-hours .time{color:var(--c-muted)}
+.info-hours.today{color:var(--c-primary);font-weight:700}
+
+/* CTA BOTTOM */
+.cta-bottom{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;
+  padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px));
+  background:#fff;border-top:1px solid var(--c-line);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  z-index:40;box-shadow:0 -6px 20px rgba(11,23,38,.08);
+}
+.cta-bottom .total-info{flex-shrink:0}
+.cta-bottom .total-info .lbl{font-size:11px;color:var(--c-muted)}
+.cta-bottom .total-info .amt{font-size:18px;font-weight:800;color:var(--c-ink)}
+.cta-bottom .btn-cta{
+  background:var(--c-primary);color:#fff;
+  padding:14px 28px;border-radius:99px;
+  font-size:14px;font-weight:800;flex:1;text-align:center;
+  cursor:pointer;transition:background .15s ease,transform .1s ease;
+}
+.cta-bottom .btn-cta:active{transform:scale(.98)}
+.cta-bottom .btn-cta:disabled{background:var(--c-line);color:var(--c-muted)}
+</style>
+<link rel="stylesheet" href="app-polish.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HERO -->
+  <div class="detail-hero" id="detailHero">
+    💇
+    <a href="list-bisnis.html"><div class="detail-back"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></div></a>
+    <div class="detail-fav" id="favBtn" onclick="this.classList.toggle('on')">
+      <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.5 1-1a5.5 5.5 0 0 0 0-7.9z"/></svg>
+    </div>
+    <div class="detail-imgs">📷 1 / 12</div>
+  </div>
+
+  <!-- INFO -->
+  <div class="detail-info">
+    <h2 id="bizName">Salon Melati</h2>
+    <div class="meta">
+      <span class="rating">★ 4.9</span>
+      <span>(127 ulasan)</span>
+      <span class="status-open"><span class="pulse"></span>Buka</span>
+    </div>
+    <div class="meta">📍 Jl. Cihampelas No. 145, Bandung</div>
+    <div class="meta">
+      <span>🕐 09:00 - 21:00</span>
+      <span>📞 0812-3456-7890</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-bar">
+    <button class="active" data-tab="layanan">Layanan</button>
+    <button data-tab="ulasan">Ulasan</button>
+    <button data-tab="info">Info</button>
+  </div>
+
+  <!-- TAB CONTENT -->
+  <div class="tab-content">
+
+    <!-- LAYANAN -->
+    <div class="tab-pane active" id="pane-layanan">
+      <div class="service-item" data-svc='{"name":"Potong Rambut Wanita","price":75000,"dur":45}'>
+        <div class="info"><h5>Potong Rambut Wanita</h5><div class="dur">⏱ 45 menit · Termasuk cuci &amp; styling</div></div>
+        <div class="right">
+          <div class="price">Rp 75.000</div>
+          <button class="add" onclick="addService(this)">+ Pilih</button>
+        </div>
+      </div>
+      <div class="service-item" data-svc='{"name":"Potong Rambut Pria","price":60000,"dur":30}'>
+        <div class="info"><h5>Potong Rambut Pria</h5><div class="dur">⏱ 30 menit · Potong + cuci + styling</div></div>
+        <div class="right">
+          <div class="price">Rp 60.000</div>
+          <button class="add" onclick="addService(this)">+ Pilih</button>
+        </div>
+      </div>
+      <div class="service-item" data-svc='{"name":"Hair Coloring (Short)","price":250000,"dur":90}'>
+        <div class="info"><h5>Hair Coloring (Short)</h5><div class="dur">⏱ 90 menit · Pewarnaan rambut pendek</div></div>
+        <div class="right">
+          <div class="price">Rp 250.000</div>
+          <button class="add" onclick="addService(this)">+ Pilih</button>
+        </div>
+      </div>
+      <div class="service-item" data-svc='{"name":"Creambath Premium","price":120000,"dur":60}'>
+        <div class="info"><h5>Creambath Premium</h5><div class="dur">⏱ 60 menit · Perawatan + pijat kepala</div></div>
+        <div class="right">
+          <div class="price">Rp 120.000</div>
+          <button class="add" onclick="addService(this)">+ Pilih</button>
+        </div>
+      </div>
+      <div class="service-item" data-svc='{"name":"Hair Spa &amp; Treatment","price":180000,"dur":75}'>
+        <div class="info"><h5>Hair Spa &amp; Treatment</h5><div class="dur">⏱ 75 menit · Treatment intensif</div></div>
+        <div class="right">
+          <div class="price">Rp 180.000</div>
+          <button class="add" onclick="addService(this)">+ Pilih</button>
+        </div>
+      </div>
+      <div class="service-item" data-svc='{"name":"Smoothing (Medium)","price":650000,"dur":180}'>
+        <div class="info"><h5>Smoothing (Medium)</h5><div class="dur">⏱ 180 menit · Pelurusan rambut profesional</div></div>
+        <div class="right">
+          <div class="price">Rp 650.000</div>
+          <button class="add" onclick="addService(this)">+ Pilih</button>
+        </div>
+      </div>
+      <div class="service-item" data-svc='{"name":"Manicure","price":100000,"dur":45}'>
+        <div class="info"><h5>Manicure</h5><div class="dur">⏱ 45 menit · Perawatan kuku tangan lengkap</div></div>
+        <div class="right">
+          <div class="price">Rp 100.000</div>
+          <button class="add" onclick="addService(this)">+ Pilih</button>
+        </div>
+      </div>
+      <div class="service-item" data-svc='{"name":"Facial Deep Cleansing","price":150000,"dur":75}'>
+        <div class="info"><h5>Facial Deep Cleansing</h5><div class="dur">⏱ 75 menit · Perawatan wajah</div></div>
+        <div class="right">
+          <div class="price">Rp 150.000</div>
+          <button class="add" onclick="addService(this)">+ Pilih</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ULASAN -->
+    <div class="tab-pane" id="pane-ulasan">
+      <div class="review-summary">
+        <div class="big">4.9</div>
+        <div class="info" style="flex:1">
+          <strong>★★★★★</strong>
+          <small>Berdasarkan 127 ulasan</small>
+          <div style="margin-top:8px">
+            <div class="review-bar"><span>5</span><div class="track"><div class="fill" style="width:88%"></div></div></div>
+            <div class="review-bar"><span>4</span><div class="track"><div class="fill" style="width:9%"></div></div></div>
+            <div class="review-bar"><span>3</span><div class="track"><div class="fill" style="width:2%"></div></div></div>
+            <div class="review-bar"><span>2</span><div class="track"><div class="fill" style="width:1%"></div></div></div>
+            <div class="review-bar"><span>1</span><div class="track"><div class="fill" style="width:0%"></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="review-item">
+        <div class="review-head">
+          <div class="review-avatar">SR</div>
+          <div><div class="name">Siti Rahma</div><div class="date">2 hari lalu</div></div>
+        </div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Pelayanan ramah, hasil potongnya rapi banget. Stylistnya juga sabar nyaranin model yang cocok. Pasti balik lagi!"</p>
+      </div>
+      <div class="review-item">
+        <div class="review-head">
+          <div class="review-avatar" style="background:linear-gradient(135deg,#F26C2A,#FFA46B)">AP</div>
+          <div><div class="name">Andi Pratama</div><div class="date">5 hari lalu</div></div>
+        </div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Booking lewat aplikasi gampang banget, tidak perlu antre. Cuma 30 menit udah selesai."</p>
+      </div>
+      <div class="review-item">
+        <div class="review-head">
+          <div class="review-avatar" style="background:linear-gradient(135deg,#15B79E,#2DD4BF)">DA</div>
+          <div><div class="name">Dewi Anggraini</div><div class="date">1 minggu lalu</div></div>
+        </div>
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">"Treatment-nya bagus, ruangan nyaman. Cuma agak ramai pas jam pulang kantor."</p>
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="tab-pane" id="pane-info">
+      <div class="info-block">
+        <strong>Tentang</strong>
+        <p>Salon kecantikan terpercaya di Bandung sejak 2018. Spesialis potong rambut, smoothing, dan perawatan wajah dengan stylist berpengalaman.</p>
+      </div>
+      <div class="info-block">
+        <strong>Alamat</strong>
+        <p>Jl. Cihampelas No. 145, Bandung, Jawa Barat 40131</p>
+      </div>
+      <div class="info-block">
+        <strong>Jam Operasional</strong>
+        <div class="info-hours today"><span class="day">Senin (Hari ini)</span><span class="time">09:00 - 21:00</span></div>
+        <div class="info-hours"><span class="day">Selasa</span><span class="time">09:00 - 21:00</span></div>
+        <div class="info-hours"><span class="day">Rabu</span><span class="time">09:00 - 21:00</span></div>
+        <div class="info-hours"><span class="day">Kamis</span><span class="time">09:00 - 21:00</span></div>
+        <div class="info-hours"><span class="day">Jumat</span><span class="time">09:00 - 21:00</span></div>
+        <div class="info-hours"><span class="day">Sabtu</span><span class="time">09:00 - 22:00</span></div>
+        <div class="info-hours"><span class="day">Minggu</span><span class="time">10:00 - 20:00</span></div>
+      </div>
+      <div class="info-block">
+        <strong>Fasilitas</strong>
+        <p>✓ AC &amp; ruang tunggu nyaman · ✓ Free WiFi · ✓ Parkir motor &amp; mobil · ✓ Toilet bersih</p>
+      </div>
+      <div class="info-block">
+        <strong>Kontak</strong>
+        <p>📞 0812-3456-7890<br />📧 owner@salonmelati.id<br />📱 Instagram: @salonmelatibdg</p>
+        <a id="waContactBtn" href="#" target="_blank" rel="noopener" class="wa-contact-btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.4M12 21.8h-.1c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4c-1-1.5-1.5-3.3-1.5-5.3 0-5.4 4.4-9.9 9.9-9.9 2.6 0 5.1 1 7 2.9 1.9 1.9 2.9 4.4 2.9 6.9 0 5.5-4.4 9.9-9.9 9.9m8.4-18.3A11.8 11.8 0 0 0 12 0C5.5 0 .2 5.3.2 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.3-1.7c1.7.9 3.6 1.4 5.7 1.4 6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.4z"/></svg>
+          Chat via WhatsApp
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Build WhatsApp link with biz name in template
+  (function(){
+    const bizName = document.title.replace(/^PesanAja\s*[—-]\s*/i, '') || 'PesanAja Partner';
+    const msg = `Halo PesanAja, saya mau menanyakan layanan di *${bizName}*.\n\nPesan saya:\n`;
+    const btn = document.getElementById('waContactBtn');
+    if (btn) btn.href = `https://wa.me/6289523809060?text=${encodeURIComponent(msg)}`;
+  })();
+</script>
+
+<!-- CTA BOTTOM -->
+<div class="cta-bottom">
+  <div class="total-info">
+    <div class="lbl">Total <span id="cartCount">0 layanan</span></div>
+    <div class="amt" id="cartAmount">Rp 0</div>
+  </div>
+  <button class="btn-cta" id="bookBtn" onclick="goToBooking()" disabled>Lanjut Booking</button>
+</div>
+
+<script>
+  /* ============================================================
+     BUSINESS REGISTRY — data per bisnis sesuai vertikal
+  ============================================================ */
+  const BIZ_REGISTRY = {
+    'salon-melati': {
+      name: 'Salon Melati', cat: 'salon',
+      hero: 'linear-gradient(135deg,#fda4af,#f43f5e)', emoji: '💇',
+      rating: 4.9, reviews: 127, address: 'Jl. Cihampelas No. 145, Bandung',
+      hours: '09:00 - 21:00', phone: '0812-3456-7890',
+      about: 'Salon kecantikan terpercaya di Bandung sejak 2018. Spesialis potong rambut, smoothing, dan perawatan wajah dengan stylist berpengalaman.',
+      services: [
+        {name:'Potong Rambut Wanita',     price:75000,  dur:45, desc:'Termasuk cuci & styling'},
+        {name:'Creambath Premium',        price:120000, dur:60, desc:'Perawatan + pijat kepala'},
+        {name:'Hair Coloring (Short)',    price:250000, dur:90, desc:'Pewarnaan rambut pendek'},
+        {name:'Smoothing (Medium)',       price:650000, dur:180,desc:'Pelurusan rambut profesional'},
+        {name:'Hair Spa & Treatment',     price:180000, dur:75, desc:'Treatment intensif'},
+        {name:'Manicure',                 price:100000, dur:45, desc:'Perawatan kuku tangan lengkap'},
+        {name:'Facial Deep Cleansing',    price:150000, dur:75, desc:'Perawatan wajah'}
+      ]
+    },
+    'glamoria': {
+      name: 'Hair Studio Aurora', cat: 'salon',
+      hero: 'linear-gradient(135deg,#fbbf24,#f59e0b)', emoji: '💇',
+      rating: 4.8, reviews: 192, address: 'Jl. Setiabudi No. 88, Bandung',
+      hours: '10:00 - 22:00', phone: '0813-2222-3333',
+      about: 'Salon premium dengan stylist bersertifikat internasional. Fokus pada hair styling modern dan teknik pewarnaan terbaru.',
+      services: [
+        {name:'Hair Cut & Styling',       price:120000, dur:60, desc:'Konsultasi + cuci + potong + styling'},
+        {name:'Balayage',                 price:850000, dur:240,desc:'Pewarnaan gradasi natural'},
+        {name:'Keratin Treatment',        price:550000, dur:150,desc:'Smoothing tahan lama'},
+        {name:'Hair Mask Repair',         price:180000, dur:60, desc:'Untuk rambut rusak'},
+        {name:'Bridal Hair Trial',        price:350000, dur:120,desc:'Konsultasi gaya rambut pernikahan'}
+      ]
+    },
+    'belle': {
+      name: 'Belle Beauty Lounge', cat: 'salon',
+      hero: 'linear-gradient(135deg,#f9a8d4,#ec4899)', emoji: '💅',
+      rating: 4.7, reviews: 84, address: 'Jl. Riau No. 17, Bandung',
+      hours: '10:00 - 20:00', phone: '0812-7777-8888',
+      about: 'Salon kuku & wajah dengan suasana lounge. Spesialis nail art & facial premium.',
+      services: [
+        {name:'Manicure + Pedicure',      price:180000, dur:90, desc:'Paket lengkap kuku tangan & kaki'},
+        {name:'Nail Art Premium',         price:220000, dur:90, desc:'Custom design + gel polish'},
+        {name:'Facial Brightening',       price:280000, dur:90, desc:'Wajah cerah & lembab'},
+        {name:'Eyebrow & Lash Lift',      price:250000, dur:75, desc:'Alis + bulu mata'}
+      ]
+    },
+    'laundry-sebening': {
+      name: 'Laundry Sebening', cat: 'laundry',
+      hero: 'linear-gradient(135deg,#93c5fd,#3b82f6)', emoji: '🧺',
+      rating: 4.7, reviews: 213, address: 'Jl. Cihampelas No. 12, Bandung',
+      hours: '24 jam', phone: '0812-1111-2222',
+      about: 'Laundry kiloan dengan pickup & delivery gratis area Bandung. Buka 24 jam, ada layanan express same-day.',
+      services: [
+        {name:'Cuci + Setrika (per kg)',  price:12000,  dur:0,  desc:'Tarif kiloan standar'},
+        {name:'Cuci Saja (per kg)',       price:8000,   dur:0,  desc:'Tanpa setrika'},
+        {name:'Setrika Saja (per kg)',    price:7000,   dur:0,  desc:'Bersih, tinggal setrika'},
+        {name:'Cuci Sepatu (per pasang)', price:35000,  dur:0,  desc:'Sepatu sneakers / kanvas'},
+        {name:'Cuci Bed Cover',           price:45000,  dur:0,  desc:'Per bed cover (king/queen)'},
+        {name:'Cuci Karpet (per m²)',     price:25000,  dur:0,  desc:'Karpet rumah / kantor'}
+      ]
+    },
+    'express24': {
+      name: 'Express24 Laundry', cat: 'laundry',
+      hero: 'linear-gradient(135deg,#60a5fa,#2563eb)', emoji: '⚡',
+      rating: 4.8, reviews: 156, address: 'Jl. Dipatiukur No. 30, Bandung',
+      hours: '06:00 - 23:00', phone: '0813-9999-1111',
+      about: 'Laundry express dengan jaminan selesai hitungan jam. Cocok untuk yang lagi buru-buru.',
+      services: [
+        {name:'Same Day Wash (per kg)',   price:25000,  dur:0,  desc:'Selesai dalam 8 jam'},
+        {name:'Express 24h (per kg)',     price:18000,  dur:0,  desc:'Selesai dalam 24 jam'},
+        {name:'Regular 48h (per kg)',     price:12000,  dur:0,  desc:'Standar 2 hari'},
+        {name:'Dry Cleaning Jas',         price:55000,  dur:0,  desc:'Per jas / blazer'}
+      ]
+    },
+    'barber-klasik': {
+      name: 'Barbershop Klasik', cat: 'barber',
+      hero: 'linear-gradient(135deg,#6ee7b7,#10b981)', emoji: '💈',
+      rating: 4.8, reviews: 167, address: 'Jl. Naripan No. 56, Bandung',
+      hours: '09:00 - 21:00', phone: '0812-4444-5555',
+      about: 'Barbershop classic dengan atmosfer vintage. Master barber berpengalaman 8+ tahun, spesialis cukur klasik & modern.',
+      services: [
+        {name:'Potong Rambut Pria',       price:55000,  dur:30, desc:'Cut, wash, styling'},
+        {name:'Shaving Premium',          price:45000,  dur:25, desc:'Cukur + facial mini'},
+        {name:'Cut + Pomade Styling',     price:90000,  dur:45, desc:'Hair cut + pomade premium'},
+        {name:'Hair Color (Pria)',        price:250000, dur:90, desc:'Pewarnaan rambut'},
+        {name:'Hair Massage & Tonic',     price:60000,  dur:30, desc:'Pijat kepala + tonic'},
+        {name:'Paket Kombo (Cut+Shave+Massage)', price:140000, dur:75, desc:'Hemat 25rb'}
+      ]
+    },
+    'asana-bali': {
+      name: 'Asana Bali Spa', cat: 'spa',
+      hero: 'linear-gradient(135deg,#c4b5fd,#7c3aed)', emoji: '💆',
+      rating: 4.8, reviews: 94, address: 'Jl. Dago No. 88, Bandung',
+      hours: '10:00 - 22:00', phone: '0812-6666-7777',
+      about: 'Spa dengan nuansa Bali. Terapis bersertifikat dari pulau Dewata. Pijat tradisional & modern.',
+      services: [
+        {name:'Balinese Massage 60\'',    price:180000, dur:60, desc:'Pijat tradisional Bali'},
+        {name:'Aromatherapy 90\'',        price:250000, dur:90, desc:'Pijat dengan minyak aromaterapi'},
+        {name:'Hot Stone 75\'',           price:280000, dur:75, desc:'Pijat batu hangat'},
+        {name:'Foot Reflexology 45\'',    price:120000, dur:45, desc:'Refleksi kaki'},
+        {name:'Couple Massage 90\'',      price:450000, dur:90, desc:'Pijat berpasangan, room private'}
+      ]
+    },
+    'zen-spa': {
+      name: 'Zen Spa & Reflexology', cat: 'spa',
+      hero: 'linear-gradient(135deg,#fcd34d,#f59e0b)', emoji: '🪷',
+      rating: 4.9, reviews: 63, address: 'Jl. Pasteur No. 42, Bandung',
+      hours: '10:00 - 22:00', phone: '0813-3333-4444',
+      about: 'Spa modern dengan sentuhan zen. Specialis refleksi kaki & full body massage.',
+      services: [
+        {name:'Full Body Massage 90\'',   price:220000, dur:90, desc:'Pijat seluruh tubuh'},
+        {name:'Foot Reflexology 60\'',    price:140000, dur:60, desc:'Refleksi kaki klasik'},
+        {name:'Body Scrub + Massage',     price:320000, dur:120,desc:'Lulur + pijat'},
+        {name:'Steam + Sauna Package',    price:180000, dur:60, desc:'Steam, sauna, jacuzzi'}
+      ]
+    },
+    'cleanaja': {
+      name: 'CleanAja Sparkle', cat: 'clean',
+      hero: 'linear-gradient(135deg,#7dd3fc,#0ea5e9)', emoji: '🧹',
+      rating: 4.8, reviews: 142, address: 'Layanan area Bandung Raya',
+      hours: '08:00 - 19:00', phone: '0812-8888-9999',
+      about: 'Cleaning service profesional untuk rumah, kantor, dan kos. Tim terverifikasi, alat & cairan disediakan.',
+      services: [
+        {name:'General Cleaning (per jam)',  price:50000,  dur:120, desc:'Bersih-bersih umum (sapu, pel, lap)'},
+        {name:'Deep Cleaning (per jam)',     price:80000,  dur:240, desc:'Bersih menyeluruh + sudut sulit'},
+        {name:'Move-in/Move-out (per jam)',  price:90000,  dur:360, desc:'Sebelum/sesudah pindahan'},
+        {name:'Kitchen Deep Clean',          price:300000, dur:120, desc:'Khusus dapur (degrease)'},
+        {name:'Bathroom Sanitize',           price:180000, dur:90,  desc:'Disinfeksi kamar mandi'}
+      ]
+    },
+    'sportaja': {
+      name: 'SportAja Arena', cat: 'sport',
+      hero: 'linear-gradient(135deg,#5eead4,#0d9488)', emoji: '⚽',
+      rating: 4.8, reviews: 289, address: 'Jl. Soekarno-Hatta No. 50, Bandung',
+      hours: '06:00 - 23:00', phone: '0812-1234-5678',
+      about: 'Komplek olahraga indoor: futsal vinyl, badminton karpet PVC, padel outdoor, dan basket court. Booking real-time.',
+      services: [
+        {name:'Futsal Lapangan 1 (per jam)', price:180000, dur:60, desc:'Lapangan vinyl indoor'},
+        {name:'Futsal VIP (per jam)',        price:220000, dur:60, desc:'Lapangan 3 dengan AC'},
+        {name:'Badminton Court (per jam)',   price:80000,  dur:60, desc:'Karpet PVC indoor'},
+        {name:'Padel Court (per jam)',       price:250000, dur:60, desc:'Outdoor, kapasitas 4 pemain'},
+        {name:'Basket Court (per jam)',      price:200000, dur:60, desc:'Indoor full court'}
+      ]
+    },
+    'washaja-cihampelas': {
+      name: 'WashAja Auto Care', cat: 'wash',
+      hero: 'linear-gradient(135deg,#a78bfa,#7c3aed)', emoji: '🚗',
+      rating: 4.7, reviews: 186, address: 'Jl. Cihampelas No. 200, Bandung',
+      hours: '07:00 - 22:00', phone: '0812-5555-6666',
+      about: 'Cuci kendaraan profesional. Antri online lewat aplikasi, hemat waktu. Tersedia detailing & wax premium.',
+      services: [
+        {name:'Cuci Motor',                  price:15000,  dur:20, desc:'Cuci luar + lap kering'},
+        {name:'Cuci Mobil Sedan',            price:50000,  dur:30, desc:'Cuci luar + interior'},
+        {name:'Cuci Mobil SUV/MPV',          price:70000,  dur:40, desc:'Cuci luar + interior + vacuum'},
+        {name:'Full Detail Premium',         price:250000, dur:90, desc:'Wax + polish + interior detailing'},
+        {name:'Cuci Mesin',                  price:35000,  dur:30, desc:'Add-on cuci ruang mesin'}
+      ]
+    }
+  };
+
+  /* ============================================================
+     ULASAN per kategori — supaya teks ulasan cocok dengan tema
+     bisnis (mis. kategori sport bicara lapangan, bukan potong rambut).
+  ============================================================ */
+  const CAT_REVIEWS = {
+    salon: [
+      { n:'Siti Rahma',      d:'2 hari lalu',  s:5, t:'Pelayanan ramah, hasil potong & catok rapi banget. Stylist-nya sabar nyaranin model yang cocok. Pasti balik lagi!' },
+      { n:'Maya Putri',      d:'5 hari lalu',  s:5, t:'Booking lewat aplikasi gampang, nggak perlu antre. Creambath-nya bikin rileks.' },
+      { n:'Dewi Anggraini',  d:'1 minggu lalu',s:4, t:'Hasil colouring-nya bagus, ruangan nyaman. Cuma agak ramai pas akhir pekan.' }
+    ],
+    barber: [
+      { n:'Rizky Maulana',   d:'2 hari lalu',  s:5, t:'Barber-nya paham banget request fade. Hasil cukur rapi, plus hair massage-nya mantap.' },
+      { n:'Fajar Nugroho',   d:'6 hari lalu',  s:5, t:'Bisa pilih barber favorit lewat aplikasi, jadi hasilnya konsisten tiap datang.' },
+      { n:'Dimas Aditya',    d:'1 minggu lalu',s:4, t:'Tempat bersih, vibe vintage-nya enak. Antre sedikit pas jam pulang kantor.' }
+    ],
+    spa: [
+      { n:'Anita Sari',      d:'3 hari lalu',  s:5, t:'Pijatnya pas, terapisnya profesional. Keluar spa badan langsung enteng.' },
+      { n:'Lina Marlina',    d:'5 hari lalu',  s:5, t:'Aromatherapy & hot stone-nya bikin rileks total. Ruangan wangi dan tenang.' },
+      { n:'Putri Handayani', d:'1 minggu lalu',s:4, t:'Couple massage-nya nyaman. Cuma parkir agak susah pas ramai.' }
+    ],
+    laundry: [
+      { n:'Andi Pratama',    d:'1 hari lalu',  s:5, t:'Cucian wangi dan lipatan rapi. Pickup tepat waktu, nggak perlu keluar rumah.' },
+      { n:'Rina Wahyu',      d:'4 hari lalu',  s:5, t:'Express same-day beneran selesai hari itu juga. Sangat membantu pas lagi buru-buru.' },
+      { n:'Budi Santoso',    d:'1 minggu lalu',s:4, t:'Harga kiloan masuk akal, hasil bersih. Sesekali ada noda membandel kurang hilang.' }
+    ],
+    clean: [
+      { n:'Bu Indah',        d:'2 hari lalu',  s:5, t:'Tim cleaning datang tepat waktu, rumah jadi kinclong. Alat & cairan dibawa sendiri.' },
+      { n:'Pak Hendra',      d:'4 hari lalu',  s:5, t:'Deep cleaning dapur memuaskan, lemak di kompor hilang total. Worth it.' },
+      { n:'Sari Wulandari',  d:'1 minggu lalu',s:4, t:'Hasil bersih dan rapi. Sedikit telat datang tapi dikabari dulu lewat WA.' }
+    ],
+    sport: [
+      { n:'Bagas Saputra',   d:'1 hari lalu',  s:5, t:'Lapangan futsal vinyl-nya empuk, nggak licin. Booking slot real-time bikin gampang atur jadwal tim.' },
+      { n:'Reza Pratama',    d:'4 hari lalu',  s:5, t:'Court badminton karpet PVC kondisinya bagus, penerangan terang. Bisa undang teman lewat aplikasi.' },
+      { n:'Yoga Firmansyah', d:'1 minggu lalu',s:4, t:'Padel court-nya seru, fasilitas lengkap. Cuma jam ramai cepat penuh, harus booking jauh hari.' }
+    ],
+    wash: [
+      { n:'Arif Rahman',     d:'2 hari lalu',  s:5, t:'Mobil bersih sampai sela-sela velg. Antre online jadi nggak perlu nunggu lama.' },
+      { n:'Dani Kurniawan',  d:'5 hari lalu',  s:5, t:'Paket premium detailing-nya rapi, interior wangi, hasil wax mengkilap.' },
+      { n:'Hadi Santoso',    d:'1 minggu lalu',s:4, t:'Cuci motor cepat dan murah. Pas weekend slot-nya cepat habis.' }
+    ]
+  };
+
+  /* ============================================================
+     FASILITAS per kategori — supaya bagian Fasilitas cocok dengan
+     tema bisnis (mis. sport bicara lapangan & ruang ganti, bukan salon).
+  ============================================================ */
+  const CAT_FACILITY = {
+    salon:   '✓ AC &amp; ruang tunggu nyaman · ✓ Free WiFi · ✓ Parkir motor &amp; mobil · ✓ Toilet bersih',
+    barber:  '✓ AC &amp; ruang tunggu · ✓ Free WiFi · ✓ TV &amp; konsol game · ✓ Parkir motor &amp; mobil',
+    spa:     '✓ Ruang pijat privat · ✓ Aromaterapi &amp; musik relaksasi · ✓ Shower &amp; loker · ✓ Parkir luas',
+    clean:   '✓ Alat &amp; cairan dibawa tim · ✓ Tim terverifikasi · ✓ Bisa atur jam datang · ✓ Garansi ulang',
+    laundry: '✓ Pickup &amp; antar gratis · ✓ Deterjen premium · ✓ Pewangi pilihan · ✓ Tracking online',
+    wash:    '✓ Ruang tunggu ber-AC · ✓ Free WiFi · ✓ Antri online · ✓ Snack &amp; kopi',
+    sport:   '✓ Lapangan standar kompetisi · ✓ Ruang ganti &amp; shower · ✓ Free WiFi · ✓ Parkir luas · ✓ Sewa alat'
+  };
+
+  // ──────────────────────────────────────────────────────────
+  // Render the page based on ?id= (and ?cat= for routing only)
+  // ──────────────────────────────────────────────────────────
+  const fmtIDR = (n) => 'Rp ' + (n || 0).toLocaleString('id-ID');
+  (function renderBiz() {
+    const id = new URLSearchParams(location.search).get('id') || 'salon-melati';
+    const biz = BIZ_REGISTRY[id] || BIZ_REGISTRY['salon-melati'];
+
+    // Title + bizName
+    document.title = 'PesanAja — ' + biz.name;
+    document.getElementById('bizName').textContent = biz.name;
+
+    // Hero gradient + emoji (preserve the back/fav/imgs nodes)
+    const hero = document.getElementById('detailHero');
+    hero.style.background = biz.hero;
+    // Replace the leading text node (emoji) without nuking child elements
+    if (hero.firstChild && hero.firstChild.nodeType === 3) hero.firstChild.nodeValue = '\n    ' + biz.emoji + '\n    ';
+
+    // Meta block (rating, ulasan count, address, hours, phone)
+    const infoMetas = document.querySelectorAll('.detail-info .meta');
+    if (infoMetas[0]) {
+      infoMetas[0].innerHTML = `
+        <span class="rating">★ ${biz.rating}</span>
+        <span>(${biz.reviews} ulasan)</span>
+        <span class="status-open"><span class="pulse"></span>Buka</span>`;
+    }
+    if (infoMetas[1]) infoMetas[1].innerHTML = `📍 ${biz.address}`;
+    if (infoMetas[2]) infoMetas[2].innerHTML = `<span>🕐 ${biz.hours}</span><span>📞 ${biz.phone}</span>`;
+
+    // Services
+    const pane = document.getElementById('pane-layanan');
+    pane.innerHTML = biz.services.map(s => `
+      <div class="service-item" data-svc='${JSON.stringify(s).replace(/'/g, "&#39;")}'>
+        <div class="info"><h5>${s.name}</h5><div class="dur">⏱ ${s.dur ? s.dur + ' menit · ' : ''}${s.desc || ''}</div></div>
+        <div class="right">
+          <div class="price">${fmtIDR(s.price)}</div>
+          <button class="add" onclick="addService(this)">+ Pilih</button>
+        </div>
+      </div>
+    `).join('');
+
+    // Reviews summary
+    const reviewBig = document.querySelector('.review-summary .big');
+    const reviewInfo = document.querySelector('.review-summary .info small');
+    if (reviewBig) reviewBig.textContent = biz.rating.toFixed(1);
+    if (reviewInfo) reviewInfo.textContent = `Berdasarkan ${biz.reviews} ulasan`;
+
+    // Info tab — about block (first .info-block p)
+    const infoBlocks = document.querySelectorAll('#pane-info .info-block');
+    if (infoBlocks[0]) {
+      infoBlocks[0].querySelector('p').textContent = biz.about;
+    }
+    if (infoBlocks[1]) {
+      infoBlocks[1].querySelector('p').textContent = biz.address;
+    }
+    // Fasilitas (index 3) — match facilities to the business category
+    if (infoBlocks[3]) {
+      const facP = infoBlocks[3].querySelector('p');
+      if (facP) facP.innerHTML = CAT_FACILITY[biz.cat] || CAT_FACILITY.salon;
+    }
+
+    // Back link → preserve cat for return-to-list
+    const cat = new URLSearchParams(location.search).get('cat') || biz.cat;
+    const backA = document.querySelector('.detail-back')?.closest('a');
+    if (backA && cat) backA.href = 'list-bisnis.html?cat=' + cat;
+
+    // WhatsApp contact link uses biz name
+    const msg = `Halo PesanAja, saya mau menanyakan layanan di *${biz.name}*.\n\nPesan saya:\n`;
+    const waBtn = document.getElementById('waContactBtn');
+    if (waBtn) waBtn.href = `https://wa.me/6289523809060?text=${encodeURIComponent(msg)}`;
+
+    // Ulasan — ganti ulasan statis dengan yang sesuai kategori bisnis
+    const PALET_AVA = [
+      'linear-gradient(135deg,#1F4FD9,#5B8DEF)',
+      'linear-gradient(135deg,#F26C2A,#FFA46B)',
+      'linear-gradient(135deg,#15B79E,#2DD4BF)'
+    ];
+    const inisial = (nm) => nm.trim().split(/\s+/).slice(0, 2)
+                              .map(w => w[0]).join('').toUpperCase();
+    const bintang = (n) => '★'.repeat(n) + '☆'.repeat(5 - n);
+    const ulasan  = CAT_REVIEWS[biz.cat] || CAT_REVIEWS.salon;
+    const paneUlasan = document.getElementById('pane-ulasan');
+    if (paneUlasan) {
+      paneUlasan.querySelectorAll('.review-item').forEach(el => el.remove());
+      paneUlasan.insertAdjacentHTML('beforeend', ulasan.map((r, i) => `
+        <div class="review-item">
+          <div class="review-head">
+            <div class="review-avatar" style="background:${PALET_AVA[i % PALET_AVA.length]}">${inisial(r.n)}</div>
+            <div><div class="name">${r.n}</div><div class="date">${r.d}</div></div>
+          </div>
+          <div class="review-stars">${bintang(r.s)}</div>
+          <p class="review-text">"${r.t}"</p>
+        </div>`).join(''));
+    }
+
+    // Info tab — jam operasional (semua hari pakai jam bisnis ini)
+    const HARI = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
+    const hariIni = HARI[(new Date().getDay() + 6) % 7];
+    if (infoBlocks[2]) {
+      infoBlocks[2].querySelectorAll('.info-hours').forEach(el => el.remove());
+      infoBlocks[2].insertAdjacentHTML('beforeend', HARI.map(h => `
+        <div class="info-hours${h === hariIni ? ' today' : ''}">
+          <span class="day">${h}${h === hariIni ? ' (Hari ini)' : ''}</span>
+          <span class="time">${biz.hours}</span>
+        </div>`).join(''));
+    }
+
+    // Info tab — kontak (telepon, email & Instagram diturunkan dari nama bisnis)
+    if (infoBlocks[4]) {
+      const slug = biz.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const pKontak = infoBlocks[4].querySelector('p');
+      if (pKontak) {
+        pKontak.innerHTML = '📞 ' + biz.phone +
+          '<br />📧 halo@' + slug + '.id' +
+          '<br />📱 Instagram: @' + slug;
+      }
+    }
+
+    // Reset cart if user came from a different business (cart is biz-scoped)
+    const savedBiz = sessionStorage.getItem('pesanaja-biz');
+    if (savedBiz && savedBiz !== biz.name) {
+      sessionStorage.removeItem('pesanaja-cart');
+      sessionStorage.removeItem('pesanaja-biz');
+    }
+  })();
+
+  /* Tab switching */
+  document.querySelectorAll('.tab-bar button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('pane-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  /* Cart / select service */
+  let cart = [];
+  function addService(btnEl) {
+    const item = btnEl.closest('.service-item');
+    const svc = JSON.parse(item.dataset.svc);
+    const idx = cart.findIndex(c => c.name === svc.name);
+    if (idx >= 0) {
+      cart.splice(idx, 1);
+      btnEl.textContent = '+ Pilih';
+      btnEl.style.background = 'var(--c-primary)';
+    } else {
+      cart.push(svc);
+      btnEl.textContent = '✓ Dipilih';
+      btnEl.style.background = 'var(--c-ok)';
+    }
+    updateCart();
+  }
+  function updateCart() {
+    const total = cart.reduce((s, c) => s + c.price, 0);
+    document.getElementById('cartCount').textContent = cart.length + ' layanan';
+    document.getElementById('cartAmount').textContent = 'Rp ' + total.toLocaleString('id-ID');
+    document.getElementById('bookBtn').disabled = cart.length === 0;
+    sessionStorage.setItem('pesanaja-cart', JSON.stringify(cart));
+    sessionStorage.setItem('pesanaja-biz', document.getElementById('bizName').textContent);
+    const _cat = new URLSearchParams(location.search).get('cat');
+    if (_cat) sessionStorage.setItem('pesanaja-cat', _cat);
+  }
+  function goToBooking() {
+    if (cart.length === 0) return;
+    // Pick up the vertical from URL (?cat=). If missing, infer from biz id.
+    const ID_TO_CAT = {
+      'salon-melati':'salon', 'glamoria':'salon', 'belle':'salon',
+      'laundry-sebening':'laundry', 'express24':'laundry',
+      'barber-klasik':'barber',
+      'asana-bali':'spa', 'zen-spa':'spa',
+      'cleanaja':'clean',
+      'sportaja':'sport',
+      'washaja-cihampelas':'wash'
+    };
+    const params = new URLSearchParams(location.search);
+    const valid = ['barber','salon','spa','clean','laundry','wash','sport'];
+    const cat = params.get('cat') || ID_TO_CAT[params.get('id')] || null;
+    if (cat && valid.includes(cat)) {
+      sessionStorage.setItem('pesanaja-cat', cat);
+      window.location.href = 'booking.html?vertical=' + cat;
+    } else {
+      window.location.href = 'booking-flow.html'; // graceful fallback
+    }
+  }
+</script>
+<script src="app-polish.js"></script>
+</body>
+</html>

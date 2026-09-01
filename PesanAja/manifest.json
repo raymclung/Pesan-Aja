@@ -1,0 +1,57 @@
+{
+  "name": "PesanAja — Booking Salon, Spa, Laundry & Lainnya",
+  "short_name": "PesanAja",
+  "description": "Cari salon, spa, klinik, laundry, sport, dan layanan lain di sekitar Anda. Booking dalam hitungan detik.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1F4FD9",
+  "theme_color": "#1F4FD9",
+  "lang": "id",
+  "dir": "ltr",
+  "categories": ["lifestyle", "shopping", "business"],
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/logo-full.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Order Saya",
+      "short_name": "Order",
+      "description": "Lihat order yang sedang berjalan",
+      "url": "/orders.html",
+      "icons": [{ "src": "assets/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Cari Bisnis",
+      "short_name": "Cari",
+      "description": "Telusuri salon, spa, laundry, dll.",
+      "url": "/list-bisnis.html",
+      "icons": [{ "src": "assets/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Profil",
+      "short_name": "Profil",
+      "description": "Akun & pengaturan",
+      "url": "/profile.html",
+      "icons": [{ "src": "assets/favicon.svg", "sizes": "any" }]
+    }
+  ]
+}

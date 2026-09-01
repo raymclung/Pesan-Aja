@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#1F4FD9" />
+<title>PesanAja — Pembayaran</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="manifest" href="manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --c-primary:#1F4FD9;--c-primary-600:#1A45BF;--c-primary-700:#153BA6;
+  --c-accent:#FF7A2D;--c-accent-600:#ED6A1C;--c-teal:#15B79E;
+  --c-ink:#0B1726;--c-ink-2:#1B2738;--c-muted:#5B6B7E;--c-muted-2:#8492A6;
+  --c-line:#E6EAF0;--c-line-2:#EEF2F7;--c-bg:#FFFFFF;--c-bg-alt:#F6F8FC;--c-bg-soft:#EEF3FF;
+  --c-ok:#16A34A;--c-warn:#F59E0B;--c-danger:#EF4444;
+  --font:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:var(--font);color:var(--c-ink);background:var(--c-bg-alt)}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;padding:0}
+a{color:inherit;text-decoration:none}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--c-bg-alt);position:relative;padding-bottom:96px;box-shadow:0 0 60px rgba(11,23,38,.08)}
+@media (min-width:520px){
+  body{background:#EEF2F7;background-image:linear-gradient(rgba(31,79,217,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(31,79,217,.04) 1px,transparent 1px);background-size:24px 24px}
+}
+
+.subheader{
+  display:flex;align-items:center;gap:10px;padding:14px 20px;background:#fff;
+  border-bottom:1px solid var(--c-line-2);position:sticky;top:0;z-index:10;
+}
+.back-btn{
+  width:38px;height:38px;border-radius:50%;background:var(--c-bg-alt);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.back-btn svg{width:18px;height:18px;stroke:var(--c-ink);fill:none;stroke-width:2.4}
+.subheader h3{margin:0;font-size:16px;font-weight:800;flex:1}
+
+/* Timer banner */
+.timer-banner{
+  background:linear-gradient(135deg,#FEF3C7,#FDE68A);
+  padding:12px 20px;display:flex;justify-content:space-between;align-items:center;
+  font-size:12.5px;font-weight:700;color:#92400E;
+  border-bottom:1px solid rgba(146,64,14,.10);
+}
+.timer-banner .icon{margin-right:6px;font-size:14px}
+.timer-banner .time{font-family:'Courier New',monospace;font-size:14px;font-weight:800}
+
+/* Sections */
+.sec{background:#fff;margin:14px;border-radius:14px;padding:16px;border:1px solid var(--c-line-2)}
+.sec-title{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:12px;font-weight:800;color:var(--c-muted);
+  text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;
+}
+
+/* Order summary */
+.os-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px}
+.os-row .name{color:var(--c-ink-2);flex:1;min-width:0}
+.os-row .amt{color:var(--c-ink);font-weight:700;margin-left:10px}
+.os-row.total{
+  margin-top:8px;padding-top:10px;
+  border-top:1px dashed var(--c-line);
+  font-size:15px;font-weight:800;
+}
+.os-row.total .amt{color:var(--c-primary)}
+.os-row.discount .amt{color:var(--c-ok)}
+
+/* Payment method */
+.pm-group{display:flex;flex-direction:column;gap:8px}
+.pm{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border:1.5px solid var(--c-line);
+  border-radius:12px;cursor:pointer;background:#fff;
+  transition:all .15s ease;
+}
+.pm:active{transform:scale(.99)}
+.pm.active{border-color:var(--c-primary);background:var(--c-bg-soft);box-shadow:0 4px 14px rgba(31,79,217,.10)}
+.pm.disabled{opacity:.5;cursor:not-allowed}
+.pm-icon{
+  width:46px;height:46px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-weight:800;font-size:11px;color:#fff;
+}
+.pm-icon.qris{background:linear-gradient(135deg,#DC2626,#991B1B);font-size:10px}
+.pm-icon.wallet{background:linear-gradient(135deg,var(--c-accent),#E65520);font-size:20px}
+.pm-icon.gopay{background:linear-gradient(135deg,#00A0E8,#0078B8);font-size:13px}
+.pm-icon.ovo{background:linear-gradient(135deg,#4C2A8A,#2D1A52);font-size:13px}
+.pm-icon.dana{background:linear-gradient(135deg,#118EEA,#0C70BD);font-size:13px}
+.pm-icon.cash{background:linear-gradient(135deg,#16A34A,#15803D);font-size:18px}
+.pm-icon.bank{background:linear-gradient(135deg,#475569,#334155);font-size:11px}
+.pm-body{flex:1;min-width:0}
+.pm-body strong{display:block;font-size:14px;color:var(--c-ink);margin-bottom:2px}
+.pm-body small{font-size:11.5px;color:var(--c-muted)}
+.pm-body small.balance{color:var(--c-ok);font-weight:700}
+.pm-body small.fee{color:var(--c-accent-600);font-weight:600}
+.pm-radio{
+  width:22px;height:22px;border-radius:50%;
+  border:2px solid var(--c-line);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s ease;
+}
+.pm.active .pm-radio{border-color:var(--c-primary);background:var(--c-primary)}
+.pm.active .pm-radio::after{
+  content:"";width:8px;height:8px;border-radius:50%;background:#fff;
+}
+.pm-recommend{
+  display:inline-block;background:rgba(22,163,74,.12);color:var(--c-ok);
+  font-size:9.5px;font-weight:800;padding:2px 7px;border-radius:99px;
+  margin-left:6px;letter-spacing:.04em;
+}
+
+/* Voucher */
+.voucher-cta{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;background:linear-gradient(135deg,#FEF3C7,#FCD34D);
+  border-radius:12px;cursor:pointer;
+}
+.voucher-cta .ic{font-size:24px}
+.voucher-cta .body{flex:1}
+.voucher-cta .body strong{display:block;font-size:13px;color:#92400E;margin-bottom:2px}
+.voucher-cta .body small{font-size:11px;color:#B45309}
+.voucher-cta .arr{color:#92400E}
+.voucher-cta .arr svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4}
+
+/* QR display modal */
+.qris-modal{
+  position:fixed;inset:0;background:rgba(11,23,38,.55);backdrop-filter:blur(6px);
+  z-index:100;display:none;align-items:center;justify-content:center;
+  padding:20px;opacity:0;transition:opacity .25s ease;
+}
+.qris-modal.on{display:flex;opacity:1}
+.qris-card{
+  background:#fff;border-radius:24px;
+  max-width:380px;width:100%;
+  transform:scale(.9);transition:transform .25s ease;
+  overflow:hidden;
+}
+.qris-modal.on .qris-card{transform:scale(1)}
+.qris-head{
+  background:linear-gradient(135deg,#DC2626,#991B1B);
+  color:#fff;padding:18px 22px;
+}
+.qris-head .logo{font-weight:800;font-size:18px;letter-spacing:.05em;margin-bottom:4px}
+.qris-head small{font-size:11px;opacity:.9}
+.qris-amount{
+  padding:16px 22px;text-align:center;
+  border-bottom:1px dashed var(--c-line);
+}
+.qris-amount .label{font-size:11px;color:var(--c-muted);margin-bottom:4px}
+.qris-amount .amt{font-size:28px;font-weight:800;color:var(--c-ink);line-height:1}
+.qris-amount .id{font-family:'Courier New',monospace;font-size:11px;color:var(--c-muted);margin-top:6px}
+.qris-qr{
+  padding:22px;display:flex;justify-content:center;
+}
+.qr-img{
+  width:200px;height:200px;
+  background-image:
+    linear-gradient(45deg, #000 25%, transparent 25%),
+    linear-gradient(-45deg, #000 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #000 75%),
+    linear-gradient(-45deg, transparent 75%, #000 75%);
+  background-size:10px 10px;
+  background-position:0 0,0 5px,5px -5px,-5px 0;
+  background-color:#fff;border:8px solid #fff;
+  box-shadow:0 0 0 2px var(--c-line);
+  position:relative;
+}
+.qr-img::after{
+  content:"PesanAja";position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);background:#fff;color:var(--c-primary);
+  padding:8px 14px;font-weight:800;font-size:12px;
+  border:3px solid #fff;border-radius:8px;letter-spacing:.04em;
+}
+.qris-timer{
+  text-align:center;padding:0 22px 14px;
+  font-size:12px;color:var(--c-muted);
+}
+.qris-timer strong{color:var(--c-danger);font-family:'Courier New',monospace}
+.qris-instructions{
+  padding:16px 22px;background:var(--c-bg-alt);
+  font-size:12px;color:var(--c-ink-2);line-height:1.6;
+}
+.qris-instructions strong{display:block;color:var(--c-ink);margin-bottom:6px}
+.qris-actions{
+  padding:14px 22px 22px;display:flex;gap:8px;
+}
+.qris-actions button{
+  flex:1;padding:12px 0;border-radius:12px;
+  font-size:13px;font-weight:800;font-family:inherit;cursor:pointer;
+}
+.qris-actions .cancel{background:var(--c-bg-alt);color:var(--c-ink-2)}
+.qris-actions .paid{background:var(--c-primary);color:#fff}
+
+/* Processing overlay */
+.proc-overlay{
+  position:fixed;inset:0;background:rgba(11,23,38,.85);backdrop-filter:blur(6px);
+  z-index:200;display:none;align-items:center;justify-content:center;
+  flex-direction:column;color:#fff;
+}
+.proc-overlay.on{display:flex}
+.spinner{
+  width:60px;height:60px;border-radius:50%;
+  border:4px solid rgba(255,255,255,.20);
+  border-top-color:#fff;
+  animation:spin 1s linear infinite;margin-bottom:18px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.proc-text{font-size:14px;font-weight:600}
+
+/* Sticky CTA */
+.cta-fixed{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;
+  padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));
+  background:#fff;border-top:1px solid var(--c-line);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  z-index:40;box-shadow:0 -6px 20px rgba(11,23,38,.08);
+}
+.cta-fixed .info{flex-shrink:0}
+.cta-fixed .info .lbl{font-size:11px;color:var(--c-muted)}
+.cta-fixed .info .amt{font-size:18px;font-weight:800;color:var(--c-ink)}
+.cta-fixed .btn{
+  background:var(--c-primary);color:#fff;
+  padding:14px 24px;border-radius:99px;
+  font-size:14px;font-weight:800;flex:1;text-align:center;
+}
+.cta-fixed .btn:disabled{background:var(--c-line);color:var(--c-muted)}
+</style>
+<link rel="stylesheet" href="app-polish.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <div class="subheader">
+    <a href="javascript:history.back()"><button class="back-btn" aria-label="Kembali"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button></a>
+    <h3>Pembayaran</h3>
+  </div>
+
+  <!-- Timer banner -->
+  <div class="timer-banner">
+    <span><span class="icon">⏰</span>Selesaikan dalam <strong>14:32</strong></span>
+    <span class="time" id="payTimer">14:32</span>
+  </div>
+
+  <!-- Order summary -->
+  <div class="sec">
+    <div class="sec-title">📋 Ringkasan Pesanan <span style="color:var(--c-primary);text-transform:none;letter-spacing:0;cursor:pointer">Ubah</span></div>
+    <div class="biz-row" style="display:flex;gap:10px;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--c-line-2);margin-bottom:10px">
+      <div id="bizEmoji" style="width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#fda4af,#f43f5e);font-size:22px">💇</div>
+      <div style="flex:1;min-width:0">
+        <strong style="display:block;font-size:13.5px" id="bizName">Salon Melati</strong>
+        <small style="font-size:11px;color:var(--c-muted)" id="bookDateTime">Sen, 18 Mei 2026 · 14:30 · Linda Dewi</small>
+      </div>
+    </div>
+    <div id="summaryList">
+      <div class="os-row"><span class="name">Potong Rambut Wanita</span><span class="amt">Rp 75.000</span></div>
+    </div>
+  </div>
+
+  <!-- Voucher -->
+  <div class="sec">
+    <a class="voucher-cta" onclick="toggleVoucher()">
+      <div class="ic">🎁</div>
+      <div class="body">
+        <strong id="voucherText">Pakai Voucher / Promo</strong>
+        <small id="voucherSub">3 voucher tersedia untuk pesanan ini</small>
+      </div>
+      <span class="arr"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></span>
+    </a>
+  </div>
+
+  <!-- Payment methods -->
+  <div class="sec">
+    <div class="sec-title">💳 Pilih Pembayaran</div>
+    <div class="pm-group">
+      <div class="pm active" data-method="qris">
+        <div class="pm-icon qris">QRIS</div>
+        <div class="pm-body">
+          <strong>QRIS <span class="pm-recommend">DIREKOMENDASIKAN</span></strong>
+          <small>Scan dengan e-wallet apapun (GoPay, OVO, Dana, dll)</small>
+        </div>
+        <div class="pm-radio"></div>
+      </div>
+
+      <div class="pm" data-method="wallet">
+        <div class="pm-icon wallet">💰</div>
+        <div class="pm-body">
+          <strong>PesanAja Wallet</strong>
+          <small class="balance">Saldo: Rp 125.000</small>
+        </div>
+        <div class="pm-radio"></div>
+      </div>
+
+      <div class="pm" data-method="gopay">
+        <div class="pm-icon gopay">GoPay</div>
+        <div class="pm-body">
+          <strong>GoPay</strong>
+          <small>Saldo: Rp 89.500</small>
+        </div>
+        <div class="pm-radio"></div>
+      </div>
+
+      <div class="pm" data-method="ovo">
+        <div class="pm-icon ovo">OVO</div>
+        <div class="pm-body">
+          <strong>OVO</strong>
+          <small>Saldo: Rp 245.000</small>
+        </div>
+        <div class="pm-radio"></div>
+      </div>
+
+      <div class="pm" data-method="dana">
+        <div class="pm-icon dana">DANA</div>
+        <div class="pm-body">
+          <strong>DANA</strong>
+          <small>Connect akun Anda</small>
+        </div>
+        <div class="pm-radio"></div>
+      </div>
+
+      <div class="pm" data-method="bank">
+        <div class="pm-icon bank">BANK</div>
+        <div class="pm-body">
+          <strong>Transfer Bank</strong>
+          <small>BCA, BRI, BNI, Mandiri</small>
+        </div>
+        <div class="pm-radio"></div>
+      </div>
+
+      <div class="pm" data-method="cash">
+        <div class="pm-icon cash">💵</div>
+        <div class="pm-body">
+          <strong>Bayar di Tempat (Cash)</strong>
+          <small class="fee">+Rp 2.000 biaya layanan</small>
+        </div>
+        <div class="pm-radio"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total breakdown -->
+  <div class="sec">
+    <div class="sec-title">💰 Rincian Bayar</div>
+    <div class="os-row"><span class="name">Subtotal layanan</span><span class="amt" id="rSubtotal">Rp 75.000</span></div>
+    <div class="os-row"><span class="name">Biaya layanan platform</span><span class="amt">Rp 2.000</span></div>
+    <div class="os-row discount"><span class="name">Diskon (voucher)</span><span class="amt" id="rDiscount">-Rp 7.500</span></div>
+    <div class="os-row total"><span class="name">Total Bayar</span><span class="amt" id="rTotal">Rp 69.500</span></div>
+  </div>
+
+  <div style="height:24px"></div>
+</div>
+
+<!-- Sticky CTA -->
+<div class="cta-fixed">
+  <div class="info">
+    <div class="lbl">Total bayar</div>
+    <div class="amt" id="ctaAmt">Rp 69.500</div>
+  </div>
+  <button class="btn" id="payBtn" onclick="pay()">Bayar Sekarang</button>
+</div>
+
+<!-- QRIS modal -->
+<div class="qris-modal" id="qrisModal">
+  <div class="qris-card">
+    <div class="qris-head">
+      <div class="logo">QRIS</div>
+      <small id="qrBiz">PesanAja · Salon Melati</small>
+    </div>
+    <div class="qris-amount">
+      <div class="label">Jumlah Pembayaran</div>
+      <div class="amt" id="qrAmt">Rp 69.500</div>
+      <div class="id" id="qrId">ID: TRX-20260518-X8K2P</div>
+    </div>
+    <div class="qris-qr">
+      <div class="qr-img"></div>
+    </div>
+    <div class="qris-timer">
+      Kadaluarsa dalam <strong id="qrTimer">04:58</strong>
+    </div>
+    <div class="qris-instructions">
+      <strong>Cara bayar:</strong>
+      1. Buka app e-wallet (GoPay/OVO/Dana/dll)<br/>
+      2. Scan QR Code di atas<br/>
+      3. Konfirmasi pembayaran sesuai jumlah<br/>
+      4. Selesai — kami akan otomatis verifikasi
+    </div>
+    <div class="qris-actions">
+      <button class="cancel" onclick="closeQris()">Batal</button>
+      <button class="paid" onclick="simulatePaid()">Saya Sudah Bayar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Processing -->
+<div class="proc-overlay" id="procOverlay">
+  <div class="spinner"></div>
+  <div class="proc-text" id="procText">Memproses pembayaran...</div>
+</div>
+
+<script>
+/* Per-vertical visuals so the payment screen matches the booked category
+   (e.g. SportAja shows ⚽ + teal, not the salon 💇). */
+const VMETA = {
+  barber:  { emoji:'💈', grad:'linear-gradient(135deg,#6ee7b7,#10b981)' },
+  salon:   { emoji:'💇', grad:'linear-gradient(135deg,#fda4af,#f43f5e)' },
+  spa:     { emoji:'💆', grad:'linear-gradient(135deg,#c4b5fd,#7c3aed)' },
+  clean:   { emoji:'🧹', grad:'linear-gradient(135deg,#7dd3fc,#0ea5e9)' },
+  laundry: { emoji:'🧺', grad:'linear-gradient(135deg,#a5b4fc,#6366f1)' },
+  wash:    { emoji:'🚗', grad:'linear-gradient(135deg,#a78bfa,#7c3aed)' },
+  sport:   { emoji:'⚽', grad:'linear-gradient(135deg,#5eead4,#0d9488)' }
+};
+function inferVertical(biz){
+  biz = (biz || '').toLowerCase();
+  if (/barber/.test(biz)) return 'barber';
+  if (/spa/.test(biz)) return 'spa';
+  if (/clean/.test(biz)) return 'clean';
+  if (/laundry/.test(biz)) return 'laundry';
+  if (/wash|auto|cuci/.test(biz)) return 'wash';
+  if (/sport|arena|futsal|badminton|padel/.test(biz)) return 'sport';
+  return 'salon';
+}
+
+let selectedMethod = 'qris';
+
+document.querySelectorAll('.pm:not(.disabled)').forEach(p => {
+  p.addEventListener('click', () => {
+    document.querySelectorAll('.pm').forEach(x => x.classList.remove('active'));
+    p.classList.add('active');
+    selectedMethod = p.dataset.method;
+    // Update CTA button text
+    const btn = document.getElementById('payBtn');
+    if (selectedMethod === 'cash') {
+      btn.textContent = 'Konfirmasi Booking';
+    } else if (selectedMethod === 'qris') {
+      btn.textContent = 'Bayar dengan QRIS';
+    } else {
+      btn.textContent = 'Bayar Sekarang';
+    }
+  });
+});
+
+function pay(){
+  if (selectedMethod === 'qris') {
+    document.getElementById('qrisModal').classList.add('on');
+  } else if (selectedMethod === 'cash') {
+    completeOrder('cash');
+  } else {
+    // Wallet/GoPay/OVO/Dana — direct charge
+    showProcessing();
+  }
+}
+
+function closeQris(){
+  document.getElementById('qrisModal').classList.remove('on');
+}
+
+function simulatePaid(){
+  closeQris();
+  showProcessing();
+}
+
+function showProcessing(){
+  const ov = document.getElementById('procOverlay');
+  ov.classList.add('on');
+  document.getElementById('procText').textContent = 'Memproses pembayaran...';
+  setTimeout(() => {
+    document.getElementById('procText').textContent = 'Pembayaran berhasil! 🎉';
+  }, 500);
+  setTimeout(() => {
+    completeOrder(selectedMethod);
+  }, 1000);
+}
+
+function completeOrder(method){
+  // Read pending booking from sessionStorage (saved by booking-flow before redirect)
+  const pending = JSON.parse(sessionStorage.getItem('pesanaja-pending') || 'null');
+  const cart = JSON.parse(sessionStorage.getItem('pesanaja-cart') || '[]');
+  const bizName = sessionStorage.getItem('pesanaja-biz') || 'Salon Melati';
+
+  const orderId = '#PSA-' + Date.now().toString().slice(-8) + '-' + Math.random().toString(36).substr(2,4).toUpperCase();
+
+  const order = pending || {
+    biz: bizName,
+    services: cart.length > 0 ? cart : [{name:'Potong Rambut Wanita',price:75000,dur:45}],
+    date: 'Sen, 18 Mei 2026',
+    time: '14:30',
+    staff: 'Linda Dewi'
+  };
+
+  order.id = orderId;
+  order.status = 'upcoming';
+  order.total = document.getElementById('rTotal').textContent;
+  order.paymentMethod = method;
+  order.createdAt = new Date().toISOString();
+
+  const orders = JSON.parse(localStorage.getItem('pesanaja-orders') || '[]');
+  orders.unshift(order);
+  localStorage.setItem('pesanaja-orders', JSON.stringify(orders));
+
+  // Clear pending
+  sessionStorage.removeItem('pesanaja-pending');
+  sessionStorage.removeItem('pesanaja-cart');
+
+  // Redirect to detail
+  window.location.href = 'order-detail.html?id=' + encodeURIComponent(orderId);
+}
+
+function toggleVoucher(){
+  // Simulate applying/removing voucher
+  const t = document.getElementById('voucherText');
+  const s = document.getElementById('voucherSub');
+  if (t.textContent.includes('Pakai')) {
+    t.textContent = '✓ PESANAJA10 (-10%)';
+    t.style.color = 'var(--c-ok)';
+    s.textContent = 'Diskon Rp 7.500 sudah diaplikasikan';
+    document.getElementById('rDiscount').textContent = '-Rp 7.500';
+    document.getElementById('rTotal').textContent = 'Rp 69.500';
+    document.getElementById('ctaAmt').textContent = 'Rp 69.500';
+  } else {
+    t.textContent = 'Pakai Voucher / Promo';
+    t.style.color = '#92400E';
+    s.textContent = '3 voucher tersedia untuk pesanan ini';
+    document.getElementById('rDiscount').textContent = 'Rp 0';
+    document.getElementById('rTotal').textContent = 'Rp 77.000';
+    document.getElementById('ctaAmt').textContent = 'Rp 77.000';
+  }
+}
+
+/* Read pending booking from sessionStorage and update display */
+(function init(){
+  const pending = JSON.parse(sessionStorage.getItem('pesanaja-pending') || 'null');
+  const cart = JSON.parse(sessionStorage.getItem('pesanaja-cart') || '[]');
+  const biz = sessionStorage.getItem('pesanaja-biz') || 'Salon Melati';
+  document.getElementById('bizName').textContent = biz;
+
+  // Match the order summary visuals + QRIS label to the booked category
+  const vkey = (pending && pending.verticalKey) || inferVertical(biz);
+  const vm = VMETA[vkey] || VMETA.salon;
+  const emojiEl = document.getElementById('bizEmoji');
+  if (emojiEl) { emojiEl.textContent = vm.emoji; emojiEl.style.background = vm.grad; }
+  const qrBizEl = document.getElementById('qrBiz');
+  if (qrBizEl) qrBizEl.textContent = 'PesanAja · ' + biz;
+
+  if (pending) {
+    document.getElementById('bookDateTime').textContent = `${pending.date} · ${pending.time} · ${pending.staff}`;
+    if (pending.services && pending.services.length > 0) {
+      let subtotal = 0;
+      document.getElementById('summaryList').innerHTML = pending.services.map(s => {
+        subtotal += s.price || 0;
+        return `<div class="os-row"><span class="name">${s.name}</span><span class="amt">Rp ${(s.price||0).toLocaleString('id-ID')}</span></div>`;
+      }).join('');
+      const fee = 2000;
+      const discount = Math.round(subtotal * 0.1);
+      const total = subtotal + fee - discount;
+      document.getElementById('rSubtotal').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
+      document.getElementById('rDiscount').textContent = '-Rp ' + discount.toLocaleString('id-ID');
+      document.getElementById('rTotal').textContent = 'Rp ' + total.toLocaleString('id-ID');
+      document.getElementById('ctaAmt').textContent = 'Rp ' + total.toLocaleString('id-ID');
+      document.getElementById('qrAmt').textContent = 'Rp ' + total.toLocaleString('id-ID');
+    }
+  } else if (cart.length > 0) {
+    let subtotal = 0;
+    document.getElementById('summaryList').innerHTML = cart.map(s => {
+      subtotal += s.price || 0;
+      return `<div class="os-row"><span class="name">${s.name}</span><span class="amt">Rp ${(s.price||0).toLocaleString('id-ID')}</span></div>`;
+    }).join('');
+    const fee = 2000;
+    const discount = Math.round(subtotal * 0.1);
+    const total = subtotal + fee - discount;
+    document.getElementById('rSubtotal').textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
+    document.getElementById('rDiscount').textContent = '-Rp ' + discount.toLocaleString('id-ID');
+    document.getElementById('rTotal').textContent = 'Rp ' + total.toLocaleString('id-ID');
+    document.getElementById('ctaAmt').textContent = 'Rp ' + total.toLocaleString('id-ID');
+    document.getElementById('qrAmt').textContent = 'Rp ' + total.toLocaleString('id-ID');
+  }
+})();
+
+/* Timer countdown */
+let secs = 14*60 + 32;
+setInterval(() => {
+  if (secs <= 0) return;
+  secs--;
+  const m = Math.floor(secs/60), s = secs%60;
+  document.getElementById('payTimer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}, 1000);
+
+let qrSecs = 4*60 + 58;
+setInterval(() => {
+  if (qrSecs <= 0) return;
+  qrSecs--;
+  const m = Math.floor(qrSecs/60), s = qrSecs%60;
+  document.getElementById('qrTimer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}, 1000);
+</script>
+<script src="app-polish.js"></script>
+</body>
+</html>

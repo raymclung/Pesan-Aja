@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#1F4FD9" />
+<title>Voucher Saya — PesanAja</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="manifest" href="manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --c-primary:#1F4FD9;--c-primary-600:#1A45BF;--c-primary-700:#153BA6;
+  --c-accent:#FF7A2D;--c-accent-600:#ED6A1C;--c-teal:#15B79E;
+  --c-ink:#0B1726;--c-ink-2:#1B2738;--c-muted:#5B6B7E;--c-muted-2:#8492A6;
+  --c-line:#E6EAF0;--c-line-2:#EEF2F7;--c-bg-alt:#F6F8FC;--c-bg-soft:#EEF3FF;
+  --c-ok:#16A34A;--c-warn:#F59E0B;--c-danger:#EF4444;
+  --font:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:var(--font);color:var(--c-ink);background:#EEF2F7}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;padding:0}
+a{color:inherit;text-decoration:none}
+
+.app-shell{max-width:480px;margin:0 auto;min-height:100vh;background:#fff;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(11,23,38,.08)}
+
+/* Header */
+.page-header{
+  background:linear-gradient(135deg,var(--c-primary),var(--c-primary-700));
+  padding:14px 20px 20px;color:#fff;position:sticky;top:0;z-index:10;
+}
+.head-top{display:flex;align-items:center;gap:12px}
+.head-top button{
+  width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+}
+.head-top svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.4}
+.head-top h1{margin:0;font-size:18px;font-weight:800;flex:1;color:#fff}
+
+/* Promo code input */
+.promo-input{
+  margin-top:14px;background:rgba(255,255,255,.18);border:1.5px dashed rgba(255,255,255,.45);
+  border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;
+}
+.promo-input svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;flex-shrink:0}
+.promo-input input{
+  flex:1;background:transparent;border:none;outline:none;color:#fff;
+  font-family:inherit;font-size:13px;font-weight:600;
+}
+.promo-input input::placeholder{color:rgba(255,255,255,.7)}
+.promo-input button{
+  background:#fff;color:var(--c-primary);padding:6px 14px;border-radius:99px;
+  font-weight:700;font-size:11.5px;
+}
+
+/* Tabs */
+.tab-bar{
+  display:flex;background:#fff;border-bottom:1px solid var(--c-line-2);
+  position:sticky;top:122px;z-index:9;
+}
+.tab-bar button{
+  flex:1;padding:14px 0;font-size:13.5px;font-weight:700;color:var(--c-muted);
+  border-bottom:3px solid transparent;margin-bottom:-1px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.tab-bar button.active{color:var(--c-primary);border-bottom-color:var(--c-primary)}
+.tab-bar .badge{
+  background:var(--c-accent);color:#fff;font-size:10px;font-weight:800;
+  padding:2px 7px;border-radius:99px;min-width:18px;text-align:center;
+}
+
+/* Voucher list */
+.voucher-list{padding:16px;display:flex;flex-direction:column;gap:12px;padding-bottom:40px}
+
+.voucher-card{
+  position:relative;background:#fff;border-radius:14px;overflow:hidden;
+  border:1px solid var(--c-line-2);box-shadow:0 2px 10px rgba(11,23,38,.05);
+  display:flex;cursor:pointer;transition:transform .15s;
+}
+.voucher-card:active{transform:scale(.99)}
+.voucher-card.expired{opacity:.55;filter:grayscale(.5)}
+.voucher-card.used{opacity:.6}
+
+.voucher-left{
+  width:96px;flex-shrink:0;position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:14px 6px;text-align:center;
+}
+.voucher-left.gradient-orange{background:linear-gradient(135deg,#FF7A2D,#ED6A1C);color:#fff}
+.voucher-left.gradient-blue{background:linear-gradient(135deg,#1F4FD9,#153BA6);color:#fff}
+.voucher-left.gradient-purple{background:linear-gradient(135deg,#8B5CF6,#6D28D9);color:#fff}
+.voucher-left.gradient-teal{background:linear-gradient(135deg,#15B79E,#0E9A85);color:#fff}
+.voucher-left.gradient-pink{background:linear-gradient(135deg,#EC4899,#BE185D);color:#fff}
+.voucher-left.gradient-gray{background:linear-gradient(135deg,#94A3B8,#64748B);color:#fff}
+
+.voucher-left .big{font-size:22px;font-weight:800;line-height:1}
+.voucher-left .small{font-size:10.5px;opacity:.9;margin-top:3px;font-weight:600}
+
+/* Perforated edge */
+.voucher-left::after,.voucher-left::before{
+  content:'';position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;
+  right:-7px;
+}
+.voucher-left::before{top:-7px}
+.voucher-left::after{bottom:-7px}
+
+.voucher-body{flex:1;padding:14px;min-width:0}
+.voucher-body h4{margin:0 0 4px;font-size:13.5px;font-weight:800;color:var(--c-ink)}
+.voucher-body .desc{font-size:11.5px;color:var(--c-muted);margin:0 0 8px;line-height:1.4}
+.voucher-body .expiry{font-size:10.5px;color:var(--c-muted-2);display:flex;align-items:center;gap:5px}
+.voucher-body .expiry.warning{color:var(--c-warn);font-weight:700}
+.voucher-body .expiry svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2}
+.voucher-body .code{
+  margin-top:8px;font-size:10.5px;color:var(--c-muted);font-family:monospace;
+  display:flex;align-items:center;gap:5px;
+}
+.voucher-body .code strong{
+  color:var(--c-ink);background:var(--c-bg-soft);padding:2px 7px;border-radius:5px;font-family:monospace;
+}
+.voucher-status{
+  position:absolute;top:8px;right:8px;font-size:9px;font-weight:800;
+  padding:3px 8px;border-radius:99px;letter-spacing:.05em;
+}
+.voucher-status.expired-tag{background:var(--c-danger);color:#fff}
+.voucher-status.used-tag{background:var(--c-muted);color:#fff}
+.voucher-status.new-tag{background:var(--c-ok);color:#fff}
+
+/* Modal */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(11,23,38,.65);backdrop-filter:blur(4px);
+  display:none;align-items:flex-end;justify-content:center;z-index:200;
+}
+.modal-overlay.show{display:flex;animation:fadein .2s}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.modal-sheet{
+  background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:480px;
+  padding:24px;animation:slideup .25s ease-out;
+}
+@keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-sheet .handle{width:36px;height:4px;background:var(--c-line);border-radius:99px;margin:0 auto 18px}
+.modal-sheet h3{margin:0 0 8px;font-size:18px;font-weight:800;text-align:center}
+.modal-sheet .voucher-detail-code{
+  background:var(--c-bg-soft);border:1.5px dashed var(--c-primary);border-radius:12px;
+  padding:14px;text-align:center;margin:14px 0;
+  font-family:monospace;font-size:18px;font-weight:800;color:var(--c-primary);letter-spacing:.1em;
+}
+.modal-sheet .terms{font-size:12px;color:var(--c-muted);line-height:1.5;margin:14px 0}
+.modal-sheet .terms li{margin-bottom:5px}
+.modal-actions{display:flex;gap:10px;margin-top:14px}
+.modal-actions button{flex:1;padding:13px 0;border-radius:12px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}
+.btn-secondary{background:var(--c-bg-alt);color:var(--c-ink-2)}
+.btn-primary{background:var(--c-primary);color:#fff}
+
+/* Empty state */
+.empty-state{
+  text-align:center;padding:60px 20px;color:var(--c-muted);
+}
+.empty-state .emoji{font-size:64px;display:block;margin-bottom:12px;opacity:.5}
+.empty-state h4{margin:0 0 6px;font-size:15px;color:var(--c-ink)}
+.empty-state p{margin:0;font-size:13px}
+
+@media (min-width:900px){
+  body{padding:30px 0}
+  .app-shell{margin:0 auto;border-radius:24px;min-height:calc(100vh - 60px);overflow:hidden}
+  .tab-bar{top:142px}
+}
+</style>
+<link rel="stylesheet" href="app-polish.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <header class="page-header">
+    <div class="head-top">
+      <button onclick="history.back()" aria-label="Kembali">
+        <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <h1>Voucher Saya</h1>
+    </div>
+    <div class="promo-input">
+      <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8V5a2 2 0 0 1 4 0v3M12 8V5a2 2 0 0 0-4 0v3"/></svg>
+      <input type="text" placeholder="Masukkan kode voucher (mis. NEWUSER10)" />
+      <button onclick="alert('Voucher diklaim!')">Klaim</button>
+    </div>
+  </header>
+
+  <div class="tab-bar">
+    <button class="active" data-tab="active">Tersedia <span class="badge" id="cntActive">5</span></button>
+    <button data-tab="used">Sudah Dipakai</button>
+    <button data-tab="expired">Kedaluwarsa</button>
+  </div>
+
+  <div class="voucher-list" id="voucherList"></div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-sheet">
+    <div class="handle"></div>
+    <h3 id="modalTitle">Detail Voucher</h3>
+    <p style="text-align:center;color:var(--c-muted);font-size:12.5px;margin:0" id="modalDesc"></p>
+    <div class="voucher-detail-code" id="modalCode"></div>
+    <ul class="terms" id="modalTerms"></ul>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal()">Tutup</button>
+      <button class="btn-primary" onclick="useVoucher()">Pakai Sekarang</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const VOUCHERS = [
+  // Active vouchers
+  { id:1, status:'active', tag:'new', color:'orange', big:'10%', small:'OFF', title:'Voucher Selamat Datang', desc:'Diskon 10% untuk booking pertama (min. Rp 50.000)', code:'NEWUSER10', expiry:'31 Mei 2026', cat:'Semua kategori' },
+  { id:2, status:'active', color:'blue', big:'Rp 25rb', small:'CASHBACK', title:'Cashback Salon', desc:'Cashback Rp 25.000 untuk booking di SalonAja', code:'SALON25K', expiry:'25 Mei 2026 (5 hari lagi)', expWarn:true, cat:'SalonAja' },
+  { id:3, status:'active', color:'purple', big:'Rp 50rb', small:'OFF', title:'Spa Premium Discount', desc:'Potongan Rp 50.000 untuk layanan spa min. Rp 200.000', code:'SPALOVE50', expiry:'15 Juni 2026', cat:'SpaAja' },
+  { id:4, status:'active', color:'teal', big:'FREE', small:'ANTAR JEMPUT', title:'Gratis Antar Jemput Laundry', desc:'Antar jemput gratis untuk laundry min. 3kg', code:'LAUNDRYFREE', expiry:'30 Mei 2026', cat:'LaundryAja' },
+  { id:5, status:'active', color:'pink', big:'15%', small:'OFF', title:'Cantik Akhir Pekan', desc:'Diskon 15% setiap Sabtu-Minggu di salon partner', code:'WEEKEND15', expiry:'31 Juli 2026', cat:'SalonAja' },
+  { id:9, status:'active', color:'teal', big:'20%', small:'OFF', title:'Diskon Sewa Lapangan', desc:'Diskon 20% sewa lapangan di SportAja (min. 1 jam)', code:'SPORT20', expiry:'30 Juni 2026', cat:'SportAja' },
+
+  // Used
+  { id:6, status:'used', color:'gray', big:'Rp 10rb', small:'OFF', title:'Diskon Barbershop', desc:'Sudah dipakai di Barbershop Klasik', code:'BARBERAJA10', expiry:'Dipakai 28 Apr 2026', cat:'BarberAja' },
+  { id:7, status:'used', color:'gray', big:'5%', small:'OFF', title:'Voucher Tester', desc:'Sudah dipakai untuk Cuci Mobil', code:'TEST5', expiry:'Dipakai 15 Apr 2026', cat:'WashAja' },
+
+  // Expired
+  { id:8, status:'expired', color:'gray', big:'Rp 30rb', small:'OFF', title:'Promo Ramadan', desc:'Diskon Rp 30.000 selama Ramadan', code:'RAMADAN30', expiry:'Kedaluwarsa 10 Apr 2026', cat:'Semua kategori' }
+];
+
+let currentTab = 'active';
+let selectedVoucher = null;
+
+function renderVouchers(){
+  const list = document.getElementById('voucherList');
+  const filtered = VOUCHERS.filter(v => v.status === currentTab);
+
+  if (filtered.length === 0){
+    list.innerHTML = `
+      <div class="empty-state">
+        <span class="emoji">🎁</span>
+        <h4>Belum ada voucher ${currentTab === 'active' ? 'tersedia' : currentTab === 'used' ? 'terpakai' : 'kedaluwarsa'}</h4>
+        <p>Klaim voucher baru atau cek promo terbaru.</p>
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = filtered.map(v => `
+    <div class="voucher-card ${v.status}" onclick="openModal(${v.id})">
+      <div class="voucher-left gradient-${v.color}">
+        <div class="big">${v.big}</div>
+        <div class="small">${v.small}</div>
+      </div>
+      <div class="voucher-body">
+        ${v.tag === 'new' ? '<span class="voucher-status new-tag">BARU</span>' : ''}
+        ${v.status === 'expired' ? '<span class="voucher-status expired-tag">EXPIRED</span>' : ''}
+        ${v.status === 'used' ? '<span class="voucher-status used-tag">TERPAKAI</span>' : ''}
+        <h4>${v.title}</h4>
+        <p class="desc">${v.desc}</p>
+        <div class="expiry ${v.expWarn ? 'warning' : ''}">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          Berlaku s.d. ${v.expiry}
+        </div>
+        <div class="code">Kode: <strong>${v.code}</strong></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openModal(id){
+  const v = VOUCHERS.find(x => x.id === id);
+  if (!v) return;
+  selectedVoucher = v;
+  document.getElementById('modalTitle').textContent = v.title;
+  document.getElementById('modalDesc').textContent = v.desc;
+  document.getElementById('modalCode').textContent = v.code;
+  document.getElementById('modalTerms').innerHTML = `
+    <li>Berlaku untuk kategori: <strong>${v.cat}</strong></li>
+    <li>Masa berlaku: <strong>${v.expiry}</strong></li>
+    <li>Tidak dapat digabungkan dengan voucher lain</li>
+    <li>Berlaku 1 kali pemakaian per akun</li>
+    <li>Hubungi CS jika ada kendala penggunaan</li>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('show');
+}
+function useVoucher(){
+  if (!selectedVoucher) return;
+  // Save to sessionStorage so booking-flow can apply it
+  sessionStorage.setItem('pesanaja-voucher', JSON.stringify(selectedVoucher));
+  closeModal();
+  // Redirect to home to start booking
+  setTimeout(() => {
+    if (confirm(`Voucher ${selectedVoucher.code} disiapkan!\n\nCari layanan ${selectedVoucher.cat} sekarang?`)) {
+      location.href = 'index.html';
+    }
+  }, 200);
+}
+
+// Tab switching
+document.querySelectorAll('.tab-bar button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.tab-bar button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    currentTab = b.dataset.tab;
+    renderVouchers();
+  });
+});
+
+// Update counter
+document.getElementById('cntActive').textContent = VOUCHERS.filter(v => v.status === 'active').length;
+
+renderVouchers();
+</script>
+
+<script src="app-polish.js"></script>
+</body>
+</html>

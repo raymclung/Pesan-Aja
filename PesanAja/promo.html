@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#1F4FD9" />
+<title>PesanAja — Promo &amp; Voucher</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="manifest" href="manifest.json" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --c-primary:#1F4FD9;--c-primary-600:#1A45BF;--c-primary-700:#153BA6;
+  --c-accent:#FF7A2D;--c-accent-600:#ED6A1C;--c-teal:#15B79E;
+  --c-ink:#0B1726;--c-ink-2:#1B2738;--c-muted:#5B6B7E;--c-muted-2:#8492A6;
+  --c-line:#E6EAF0;--c-line-2:#EEF2F7;--c-bg:#FFFFFF;--c-bg-alt:#F6F8FC;--c-bg-soft:#EEF3FF;
+  --c-ok:#16A34A;--c-warn:#F59E0B;--c-danger:#EF4444;
+  --font:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;font-family:var(--font);color:var(--c-ink);background:#fff}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;padding:0}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--c-bg-alt);position:relative;padding-bottom:88px;box-shadow:0 0 60px rgba(11,23,38,.08)}
+@media (min-width:520px){
+  body{background:#EEF2F7;background-image:linear-gradient(rgba(31,79,217,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(31,79,217,.04) 1px,transparent 1px);background-size:24px 24px}
+}
+
+/* Promo header */
+.promo-head{
+  background:linear-gradient(135deg,var(--c-accent),#F26C2A,#E65520);
+  padding:20px 20px 56px;color:#fff;position:relative;overflow:hidden;
+}
+.promo-head::before{
+  content:"";position:absolute;right:-40px;top:-30px;
+  width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.10);
+}
+.promo-head::after{
+  content:"";position:absolute;left:-20px;bottom:-30px;
+  width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.10);
+}
+.ph-top{
+  display:flex;align-items:center;gap:10px;position:relative;z-index:1;margin-bottom:14px;
+}
+.back-btn{
+  width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.20);
+  display:flex;align-items:center;justify-content:center;
+}
+.back-btn svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.4}
+.ph-top h1{margin:0;font-size:20px;font-weight:800;flex:1;color:#fff}
+.ph-hero{position:relative;z-index:1}
+.ph-hero h2{margin:0 0 4px;font-size:24px;font-weight:800;color:#fff;line-height:1.2}
+.ph-hero p{margin:0;font-size:13px;opacity:.92}
+
+/* Wallet & poin card */
+.coin-row{
+  margin:-36px 20px 20px;background:#fff;border-radius:16px;
+  padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  box-shadow:0 12px 30px rgba(11,23,38,.10);position:relative;z-index:2;
+}
+.coin-cell{
+  text-align:center;padding:6px;
+}
+.coin-cell:not(:last-child){border-right:1px solid var(--c-line-2)}
+.coin-cell .ic{font-size:22px;margin-bottom:4px}
+.coin-cell .num{font-size:18px;font-weight:800;color:var(--c-primary);line-height:1}
+.coin-cell .lbl{font-size:11px;color:var(--c-muted);margin-top:4px;font-weight:600}
+
+/* Code redeem box */
+.redeem-box{
+  margin:0 20px 20px;background:#fff;border-radius:14px;
+  border:1.5px dashed var(--c-primary);padding:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.redeem-box .ic{
+  width:42px;height:42px;border-radius:10px;background:var(--c-bg-soft);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.redeem-box .body{flex:1}
+.redeem-box .body strong{display:block;font-size:13.5px;color:var(--c-ink);margin-bottom:2px}
+.redeem-box .body input{
+  width:100%;border:none;background:transparent;outline:none;
+  font-family:inherit;font-size:12.5px;color:var(--c-muted);padding:2px 0;
+}
+.redeem-box .btn{
+  background:var(--c-primary);color:#fff;
+  padding:8px 14px;border-radius:99px;font-size:12px;font-weight:800;
+}
+
+/* Tabs */
+.promo-tabs{
+  display:flex;padding:0 20px;gap:6px;background:var(--c-bg-alt);
+  position:sticky;top:0;z-index:10;overflow-x:auto;scrollbar-width:none;
+}
+.promo-tabs::-webkit-scrollbar{display:none}
+.promo-tabs button{
+  padding:12px 14px;font-size:13px;font-weight:700;color:var(--c-muted);
+  border-bottom:2.5px solid transparent;white-space:nowrap;margin-bottom:-1px;
+}
+.promo-tabs button.active{color:var(--c-primary);border-bottom-color:var(--c-primary)}
+.promo-tabs button .count{
+  background:var(--c-line);font-size:10.5px;padding:1px 7px;border-radius:99px;
+  margin-left:4px;color:var(--c-ink-2);font-weight:800;
+}
+.promo-tabs button.active .count{background:var(--c-bg-soft);color:var(--c-primary)}
+
+/* Voucher list */
+.voucher-list{padding:14px 20px;display:flex;flex-direction:column;gap:12px}
+
+/* Voucher card — ticket style */
+.voucher-card{
+  background:#fff;border-radius:14px;
+  display:flex;overflow:hidden;
+  box-shadow:0 4px 14px rgba(11,23,38,.06);border:1px solid var(--c-line-2);
+  position:relative;
+}
+.voucher-card::before,
+.voucher-card::after{
+  content:"";position:absolute;width:18px;height:18px;border-radius:50%;
+  background:var(--c-bg-alt);
+}
+.voucher-card::before{left:115px;top:-9px}
+.voucher-card::after{left:115px;bottom:-9px}
+
+.vc-img{
+  width:124px;flex-shrink:0;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:14px 10px;flex-direction:column;
+  position:relative;
+}
+.vc-img::after{
+  content:"";position:absolute;right:-1px;top:8px;bottom:8px;
+  width:1.5px;background-image:linear-gradient(to bottom,var(--c-line) 50%,transparent 50%);
+  background-size:1.5px 8px;
+}
+.vc-img.bg-orange{background:linear-gradient(135deg,#FF8A3D,#E65520)}
+.vc-img.bg-blue{background:linear-gradient(135deg,#3A78E0,var(--c-primary-700))}
+.vc-img.bg-teal{background:linear-gradient(135deg,#2DD4BF,#0F9E89)}
+.vc-img.bg-purple{background:linear-gradient(135deg,#A78BFA,#7C3AED)}
+.vc-img.bg-rose{background:linear-gradient(135deg,#FB7185,#E11D48)}
+.vc-img.bg-green{background:linear-gradient(135deg,#34D399,#16A34A)}
+.vc-img.bg-amber{background:linear-gradient(135deg,#FCD34D,#D97706)}
+.vc-img .pct{font-size:32px;font-weight:900;line-height:1;letter-spacing:-.02em}
+.vc-img .pct .small{font-size:14px;vertical-align:top;font-weight:700}
+.vc-img .lbl{font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-top:5px;opacity:.95}
+
+.vc-body{flex:1;padding:14px 16px;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
+.vc-body h4{margin:0 0 4px;font-size:13.5px;font-weight:700;color:var(--c-ink)}
+.vc-body .desc{font-size:11.5px;color:var(--c-muted);margin:0 0 8px;line-height:1.4}
+.vc-body .code{
+  display:inline-block;background:var(--c-bg-soft);color:var(--c-primary);
+  font-family:'Courier New',monospace;font-weight:800;font-size:11.5px;
+  padding:3px 8px;border-radius:5px;border:1px dashed var(--c-primary);
+  margin-bottom:8px;
+}
+.vc-foot{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+}
+.vc-time{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10.5px;font-weight:700;color:var(--c-accent-600);
+  background:rgba(255,122,45,.10);padding:3px 8px;border-radius:99px;
+}
+.vc-time.urgent{background:rgba(220,38,38,.10);color:var(--c-danger);animation:blink 1.5s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.6}}
+.vc-btn{
+  background:var(--c-primary);color:#fff;
+  padding:7px 14px;border-radius:99px;
+  font-size:11.5px;font-weight:800;cursor:pointer;
+  transition:background .15s;
+}
+.vc-btn:active{transform:scale(.96)}
+.vc-btn.claimed{background:var(--c-ok)}
+.vc-btn.used{background:var(--c-line);color:var(--c-muted);cursor:not-allowed}
+
+/* Featured banner */
+.featured-banner{
+  margin:0 20px 18px;background:linear-gradient(135deg,#7C3AED,#5B21B6);
+  border-radius:16px;padding:20px;color:#fff;
+  position:relative;overflow:hidden;
+}
+.featured-banner::after{
+  content:"";position:absolute;right:-20px;bottom:-30px;
+  width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.12);
+}
+.featured-banner .pill{
+  display:inline-block;background:rgba(255,255,255,.22);
+  font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 10px;border-radius:99px;margin-bottom:10px;backdrop-filter:blur(4px);
+}
+.featured-banner h3{margin:0 0 4px;font-size:18px;font-weight:800;line-height:1.2;color:#fff;position:relative;z-index:1}
+.featured-banner p{margin:0 0 14px;font-size:12.5px;opacity:.92;position:relative;z-index:1;max-width:75%}
+.featured-banner .countdown{
+  display:flex;gap:6px;align-items:center;margin-bottom:14px;position:relative;z-index:1;
+}
+.featured-banner .ctd-box{
+  background:rgba(255,255,255,.22);backdrop-filter:blur(4px);
+  border-radius:8px;padding:6px 10px;font-weight:800;font-size:16px;
+  min-width:42px;text-align:center;
+}
+.featured-banner .ctd-lbl{font-size:9.5px;color:rgba(255,255,255,.8);margin-top:1px;font-weight:600;text-transform:uppercase}
+.featured-banner .btn-cta{
+  background:#fff;color:#5B21B6;
+  padding:10px 18px;border-radius:99px;font-size:13px;font-weight:800;
+  display:inline-flex;align-items:center;gap:6px;position:relative;z-index:1;
+}
+
+/* Section head */
+.sec-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px 8px;
+}
+.sec-head h3{margin:0;font-size:14px;font-weight:800;color:var(--c-ink)}
+.sec-head a{font-size:12px;color:var(--c-primary);font-weight:700}
+
+/* Bottom nav */
+.bottom-nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;background:#fff;border-top:1px solid var(--c-line);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));z-index:50;
+}
+.bottom-nav button{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:10.5px;font-weight:600;color:var(--c-muted-2);
+  flex:1;padding:6px 4px;position:relative;
+}
+.bottom-nav button.active{color:var(--c-primary)}
+.bottom-nav button.active::before{
+  content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+  width:28px;height:3px;background:var(--c-primary);border-radius:0 0 3px 3px;
+}
+.bottom-nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2}
+.bottom-nav button.active svg{stroke-width:2.4}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+  background:var(--c-ink);color:#fff;padding:12px 18px;
+  border-radius:14px;font-size:13px;font-weight:600;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 12px 30px rgba(0,0,0,.30);z-index:200;
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(-10px)}
+.toast.success{background:var(--c-ok)}
+</style>
+<link rel="stylesheet" href="app-polish.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header -->
+  <div class="promo-head">
+    <div class="ph-top">
+      <a href="index.html"><button class="back-btn" aria-label="Kembali"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button></a>
+      <h1>Promo &amp; Voucher</h1>
+    </div>
+    <div class="ph-hero">
+      <h2>Voucher Terbaik untuk Kamu 🎁</h2>
+      <p>Klaim sekarang sebelum habis. Berlaku semua kategori.</p>
+    </div>
+  </div>
+
+  <!-- Wallet/Poin -->
+  <div class="coin-row">
+    <div class="coin-cell">
+      <div class="ic">💰</div>
+      <div class="num">Rp 125rb</div>
+      <div class="lbl">PesanAja Wallet</div>
+    </div>
+    <div class="coin-cell">
+      <div class="ic">⭐</div>
+      <div class="num">450</div>
+      <div class="lbl">Poin Reward</div>
+    </div>
+  </div>
+
+  <!-- Redeem code -->
+  <div class="redeem-box">
+    <div class="ic">🎫</div>
+    <div class="body">
+      <strong>Punya kode voucher?</strong>
+      <input type="text" placeholder="Masukkan kode (contoh: PESANAJA50)" id="redeemInput" />
+    </div>
+    <button class="btn" onclick="redeemCode()">Pakai</button>
+  </div>
+
+  <!-- Featured countdown banner -->
+  <div class="featured-banner">
+    <span class="pill">⚡ FLASH SALE</span>
+    <h3>Diskon Hingga 70%</h3>
+    <p>Voucher spesial untuk member baru. Berakhir dalam:</p>
+    <div class="countdown">
+      <div>
+        <div class="ctd-box" id="hh">02</div>
+        <div class="ctd-lbl">Jam</div>
+      </div>
+      <span style="font-size:18px;font-weight:800">:</span>
+      <div>
+        <div class="ctd-box" id="mm">34</div>
+        <div class="ctd-lbl">Menit</div>
+      </div>
+      <span style="font-size:18px;font-weight:800">:</span>
+      <div>
+        <div class="ctd-box" id="ss">12</div>
+        <div class="ctd-lbl">Detik</div>
+      </div>
+    </div>
+    <button class="btn-cta" onclick="scrollToVouchers()">Lihat Voucher Flash →</button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="promo-tabs">
+    <button class="active" data-tab="all">Semua <span class="count" id="cAll">0</span></button>
+    <button data-tab="claimed">Voucher Saya <span class="count" id="cClaimed">0</span></button>
+    <button data-tab="flash">Flash Sale <span class="count" id="cFlash">0</span></button>
+    <button data-tab="newuser">Member Baru</button>
+    <button data-tab="cashback">Cashback</button>
+  </div>
+
+  <div class="sec-head">
+    <h3 id="listTitle">Semua Voucher Tersedia</h3>
+    <a href="#">Urutkan</a>
+  </div>
+
+  <!-- Voucher list -->
+  <div class="voucher-list" id="voucherList"></div>
+
+  <div style="height:24px"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><span id="toastMsg"></span></div>
+
+<!-- Bottom nav -->
+<nav class="bottom-nav">
+  <a href="index.html" style="display:contents"><button aria-label="Home">
+    <svg viewBox="0 0 24 24"><path d="M3 12 12 4l9 8"/><path d="M5 10v10h14V10"/></svg>Home
+  </button></a>
+  <a href="orders.html" style="display:contents"><button aria-label="Order">
+    <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>Order
+  </button></a>
+  <button class="active" aria-label="Promo">
+    <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8V5a2 2 0 0 1 4 0v3M12 8V5a2 2 0 0 0-4 0v3"/></svg>Promo
+  </button>
+  <a href="inbox.html" style="display:contents"><button aria-label="Chat">
+    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.2a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6A8.38 8.38 0 0 1 12.5 3a8.5 8.5 0 0 1 8.5 8.5z"/></svg>Chat
+  </button></a>
+  <a href="profile.html" style="display:contents"><button aria-label="Profil">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profil
+  </button></a>
+</nav>
+
+<script>
+const vouchers = [
+  { id:'v1', type:'flash', bg:'bg-orange', pct:'50', label:'OFF', title:'Diskon 50% Salon Pertama',
+    desc:'Min. transaksi Rp 100rb. Berlaku semua salon partner.', code:'PESANAJA50',
+    expires:'18:00 hari ini', urgent:true, claimed:false },
+  { id:'v2', type:'newuser', bg:'bg-blue', pct:'10', label:'OFF', title:'Voucher 10% Tanpa Min. Order',
+    desc:'Khusus pengguna baru. Berlaku 7 hari sejak klaim.', code:'NEWUSER10',
+    expires:'7 hari', urgent:false, claimed:true },
+  { id:'v3', type:'cashback', bg:'bg-teal', pct:'25rb', label:'CASHBACK', title:'Cashback Rp 25rb tiap Booking',
+    desc:'Bayar pakai QRIS, cashback otomatis ke wallet.', code:'CASHBACK25',
+    expires:'31 Mei 2026', urgent:false, claimed:false },
+  { id:'v4', type:'flash', bg:'bg-purple', pct:'70', label:'OFF', title:'Spa &amp; Massage Promo 70%',
+    desc:'Maks. potongan Rp 100rb. Berlaku semua spa partner.', code:'SPA70',
+    expires:'14 jam', urgent:true, claimed:false },
+  { id:'v5', type:'flash', bg:'bg-rose', pct:'30', label:'OFF', title:'Smoothing Hemat 30%',
+    desc:'Khusus Salon Melati. Berlaku Senin–Jumat.', code:'SMOOTH30',
+    expires:'2 hari', urgent:false, claimed:false },
+  { id:'v6', type:'newuser', bg:'bg-amber', pct:'Rp 50rb', label:'VOUCHER', title:'Voucher Cuci Mobil Rp 50rb',
+    desc:'Khusus member baru WashAja. Berlaku 14 hari.', code:'WASH50RB',
+    expires:'14 hari', urgent:false, claimed:false },
+  { id:'v7', type:'cashback', bg:'bg-green', pct:'5%', label:'CASHBACK', title:'Cashback 5% setiap Booking',
+    desc:'Tanpa minimum, cashback langsung ke poin.', code:'CB5PERCENT',
+    expires:'Tidak ada batas', urgent:false, claimed:true },
+  { id:'v8', type:'flash', bg:'bg-orange', pct:'BOGO', label:'DEAL', title:'Boba — Buy 1 Get 1 Free',
+    desc:'Khusus weekday. Min. 1 minuman Rp 20rb.', code:'BOBA-BOGO',
+    expires:'5 hari', urgent:false, claimed:false }
+];
+
+let currentTab = 'all';
+
+function renderVouchers(){
+  const list = document.getElementById('voucherList');
+  let filtered = vouchers;
+  if (currentTab === 'claimed') filtered = vouchers.filter(v => v.claimed);
+  else if (currentTab === 'flash') filtered = vouchers.filter(v => v.type === 'flash');
+  else if (currentTab === 'newuser') filtered = vouchers.filter(v => v.type === 'newuser');
+  else if (currentTab === 'cashback') filtered = vouchers.filter(v => v.type === 'cashback');
+
+  if (filtered.length === 0) {
+    list.innerHTML = `<div style="text-align:center;padding:40px 20px;color:var(--c-muted)">
+      <div style="font-size:48px;margin-bottom:10px">🎁</div>
+      <p>Belum ada voucher di kategori ini</p>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(v => `
+    <div class="voucher-card" data-id="${v.id}">
+      <div class="vc-img ${v.bg}">
+        <div class="pct">${v.pct}${typeof v.pct === 'string' && v.pct.length <= 3 ? '<span class="small">%</span>' : ''}</div>
+        <div class="lbl">${v.label}</div>
+      </div>
+      <div class="vc-body">
+        <div>
+          <h4>${v.title}</h4>
+          <p class="desc">${v.desc}</p>
+          <span class="code">${v.code}</span>
+        </div>
+        <div class="vc-foot">
+          <span class="vc-time ${v.urgent ? 'urgent' : ''}">
+            <svg style="width:11px;height:11px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>
+            ${v.expires}
+          </span>
+          <button class="vc-btn ${v.claimed ? 'claimed' : ''}" onclick="claimVoucher('${v.id}')">
+            ${v.claimed ? '✓ Diklaim' : 'Klaim'}
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateCounts(){
+  document.getElementById('cAll').textContent = vouchers.length;
+  document.getElementById('cClaimed').textContent = vouchers.filter(v => v.claimed).length;
+  document.getElementById('cFlash').textContent = vouchers.filter(v => v.type === 'flash').length;
+}
+
+function claimVoucher(id){
+  const v = vouchers.find(x => x.id === id);
+  if (!v) return;
+  if (v.claimed) {
+    showToast('Voucher sudah Anda klaim. Pakai saat checkout!', 'success');
+    return;
+  }
+  v.claimed = true;
+  showToast('🎉 Voucher berhasil diklaim! Cek di tab "Voucher Saya"', 'success');
+  renderVouchers();
+  updateCounts();
+}
+
+function redeemCode(){
+  const code = document.getElementById('redeemInput').value.trim().toUpperCase();
+  if (!code) { showToast('Masukkan kode voucher dulu'); return; }
+  const v = vouchers.find(x => x.code.toUpperCase() === code);
+  if (!v) { showToast('Kode voucher tidak valid atau sudah expired'); return; }
+  if (v.claimed) { showToast('Kamu sudah klaim voucher ini!'); return; }
+  v.claimed = true;
+  document.getElementById('redeemInput').value = '';
+  showToast(`🎉 Voucher "${v.title}" berhasil ditambahkan!`, 'success');
+  renderVouchers();
+  updateCounts();
+}
+
+function showToast(msg, type){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = 'toast on' + (type === 'success' ? ' success' : '');
+  setTimeout(() => t.classList.remove('on'), 2500);
+}
+
+function scrollToVouchers(){
+  currentTab = 'flash';
+  document.querySelectorAll('.promo-tabs button').forEach(b => b.classList.toggle('active', b.dataset.tab === 'flash'));
+  document.getElementById('listTitle').textContent = 'Flash Sale ⚡';
+  renderVouchers();
+  document.getElementById('voucherList').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+document.querySelectorAll('.promo-tabs button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.promo-tabs button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    currentTab = b.dataset.tab;
+    const titles = {all:'Semua Voucher Tersedia',claimed:'Voucher Saya',flash:'Flash Sale ⚡',newuser:'Voucher Member Baru',cashback:'Voucher Cashback'};
+    document.getElementById('listTitle').textContent = titles[currentTab] || 'Voucher';
+    renderVouchers();
+  });
+});
+
+/* Countdown */
+let seconds = 2*3600 + 34*60 + 12;
+function tick(){
+  if (seconds <= 0) seconds = 24*3600;
+  const h = Math.floor(seconds/3600);
+  const m = Math.floor((seconds%3600)/60);
+  const s = seconds%60;
+  document.getElementById('hh').textContent = h.toString().padStart(2,'0');
+  document.getElementById('mm').textContent = m.toString().padStart(2,'0');
+  document.getElementById('ss').textContent = s.toString().padStart(2,'0');
+  seconds--;
+}
+tick();
+setInterval(tick, 1000);
+
+renderVouchers();
+updateCounts();
+</script>
+<script src="app-polish.js"></script>
+</body>
+</html>

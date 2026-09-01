@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#1F4FD9" />
+  <title>Booking — PesanAja</title>
+  <meta name="description" content="Booking layanan PesanAja: BarberAja, SalonAja, SpaAja, CleanAja, LaundryAja, WashAja, SportAja." />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="booking-flow.css" />
+<link rel="stylesheet" href="app-polish.css" />
+</head>
+<body class="bf-body">
+
+  <div class="bf-shell">
+    <!-- COVER (rendered by engine based on module) -->
+    <header id="cover" class="book-cover"></header>
+
+    <!-- MAIN FORM -->
+    <div id="mainForm">
+      <div class="step-header">
+        <span class="step-counter" id="stepCounter">Langkah 1</span>
+        <div class="step-progress" id="progress"></div>
+        <h2 class="step-title" id="stepTitle">Memuat...</h2>
+        <p class="step-subtitle" id="stepSubtitle"></p>
+      </div>
+
+      <div class="step-body" id="stepBody"></div>
+    </div>
+
+    <!-- SUCCESS (revealed after submit) -->
+    <div id="success" hidden></div>
+  </div>
+
+  <!-- STICKY FOOTER -->
+  <footer class="bf-footer">
+    <div class="ff-inner">
+      <button class="btn-back" id="backBtn" type="button" aria-label="Kembali">←</button>
+      <div style="position:relative; flex:1;">
+        <span class="footer-hint" id="footerHint"></span>
+        <button class="btn-next" id="nextBtn" type="button">Lanjutkan →</button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="booking-modules.js"></script>
+  <script src="booking-steps.js"></script>
+  <script src="booking-engine.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => window.PA_BOOKING.init());
+  </script>
+<script src="app-polish.js"></script>
+</body>
+</html>
